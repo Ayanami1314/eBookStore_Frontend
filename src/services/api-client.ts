@@ -1,8 +1,9 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { BASEURL } from "../common/common";
+import { PREFIX } from "../common/common";
 
 const apiClientInstance = axios.create({
-  baseURL: BASEURL,
+  baseURL: PREFIX,
+  withCredentials: true,
 });
 
 class apiClient<T> {
@@ -16,11 +17,13 @@ class apiClient<T> {
       method: "GET",
       params: params,
     };
+    // 后端API设计为 {total: number, items: T[]}
     const data = apiClientInstance
-      .get<T[]>(this.endpoint, config)
-      .then((res) => res.data);
+      .get<{ items: T[] }>(this.endpoint, config)
+      .then((res) => res.data.items);
     return data;
   };
+
   getById = (id: string, params?: any) => {
     const config: AxiosRequestConfig = {
       url: `${this.endpoint}/${id}`,

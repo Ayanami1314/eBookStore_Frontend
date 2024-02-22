@@ -10,7 +10,7 @@ interface NavItem {
   link: string;
 }
 const navItems: NavItem[] = [
-  { description: "主页", link: "/" },
+  { description: "主页", link: "/home" },
   { description: "购物车", link: "/cart" },
   { description: "订单", link: "/bills" },
   { description: "统计数据", link: "/analysis" },

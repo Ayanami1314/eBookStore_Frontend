@@ -1,17 +1,42 @@
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, message } from "antd";
+import login from "../services/login";
+import useAuthStore from "../auth/useAuthStore";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 interface FormItems {
   username: string;
   password: string;
 }
 const LoginForm = () => {
+  const [messageApi, contextHolder] = message.useMessage();
   // TODO: add validation
+  const { authinfo, setAuth } = useAuthStore();
+  const [, setMessage] = useState("");
+  const navigate = useNavigate();
   const handleSubmit = (values: FormItems) => {
-    // BUG: 这里不知道为什么不能用hook,怎么向后端发送数据？
+    login(values.username, values.password).then(({ ok, message }) => {
+      setAuth({ ...authinfo, isUser: ok });
+      setMessage(message);
+      console.log("ok: " + ok);
+      console.log("message: " + message);
+      if (ok) {
+        messageApi.open({
+          type: "success",
+          content: "登录成功！",
+        });
+        navigate("/home");
+      } else
+        messageApi.open({
+          type: "error",
+          content: "登录失败！",
+        });
+    });
     console.log(values);
   };
 
   return (
     <>
+      {contextHolder}
       <Form onFinish={handleSubmit}>
         <Form.Item<FormItems>
           name="username"

@@ -7,7 +7,11 @@ const BookList = () => {
   // gutter: 边距
   // span: n/24 * 父容器最大宽度，类似fr
   let books = fakeBooks;
-  const { data, isLoading, isError } = useBooks();
+  const { data, isLoading, isError } = useBooks({
+    keyword: "",
+    pageIndex: 1,
+    pageSize: 10,
+  });
   // 简单改变loading 属性就可以做出skeleton效果
   if (!isError && data) {
     books = data;

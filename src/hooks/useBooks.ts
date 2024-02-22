@@ -10,19 +10,32 @@ interface Book {
   sales: number;
   ISBN?: string;
 }
-// TODO: 使用useItem换掉，还是看api怎么给
-const fetchBooks = () => {
+interface searchBooksProp {
+  keyword: string;
+  pageIndex: number;
+  pageSize: number;
+}
+const fetchBooks = ({ keyword, pageIndex, pageSize }: searchBooksProp) => {
   const apiClientInstance = new apiClient<Book>("/books");
-  return apiClientInstance.getAll();
+  return apiClientInstance.getAll({
+    keyword: keyword,
+    pageIndex: pageIndex,
+    pageSize: pageSize,
+  });
 };
 const fetchSingleBook = (id: string) => {
   const apiClientInstance = new apiClient<Book>("/book");
   return apiClientInstance.getById(id);
 };
-const useBooks = () => {
+const useBooks = ({ keyword, pageIndex, pageSize }: searchBooksProp) => {
   const { data, isError, isLoading } = useQuery<Book[], Error>({
     queryKey: ["books"],
-    queryFn: fetchBooks,
+    queryFn: () =>
+      fetchBooks({
+        keyword: keyword,
+        pageIndex: pageIndex,
+        pageSize: pageSize,
+      }),
   });
   return { data, isError, isLoading };
 };
