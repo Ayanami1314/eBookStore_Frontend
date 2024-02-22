@@ -5,8 +5,9 @@ import HomeLayout from "../components/HomeLayout";
 import UserDetailPage from "./UserDetailPage";
 import ErrorPage from "./ErrorPage";
 import CreateNewUserForm from "../components/CreateNewUserForm";
-import PrivateRoute from "./PrivateRoute";
+import AdminPrivateRoute from "./AdminPrivateRoute";
 import AdminHomePage from "./admin/AdminHomePage";
+import UserPrivateRoute from "./UserPrivateRoute";
 /*
 / (home-page)
 NavBar
@@ -30,23 +31,30 @@ booklist
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomeLayout />,
-    errorElement: <ErrorPage />,
+    element: <UserPrivateRoute />,
     children: [
-      { index: true, element: <Homepage /> },
       {
-        path: "login",
+        path: "home",
+        element: <HomeLayout />,
+        errorElement: <ErrorPage />,
         children: [
-          { index: true, element: <LoginPage /> },
-          { path: "create", element: <CreateNewUserForm /> },
+          { index: true, element: <Homepage /> },
+          { path: "user/:id", element: <UserDetailPage /> },
         ],
       },
-      { path: "user/:id", element: <UserDetailPage /> },
     ],
   },
   {
+    path: "/login",
+    children: [
+      { index: true, element: <LoginPage /> },
+      { path: "create", element: <CreateNewUserForm /> },
+    ],
+  },
+
+  {
     path: "/admin",
-    element: <PrivateRoute />,
+    element: <AdminPrivateRoute />,
     children: [
       // 全部正常用户可以访问的界面
       {
@@ -54,13 +62,6 @@ const router = createBrowserRouter([
         element: <HomeLayout />,
         children: [
           { index: true, element: <AdminHomePage></AdminHomePage> },
-          {
-            path: "login",
-            children: [
-              { index: true, element: <LoginPage /> },
-              { path: "create", element: <CreateNewUserForm /> },
-            ],
-          },
           { path: "user/:id", element: <UserDetailPage /> },
         ],
       },

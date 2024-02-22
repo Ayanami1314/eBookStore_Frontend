@@ -1,24 +1,23 @@
-import useAuthStore from "../auth/useAuthStore";
-import apiClient from "./api-client";
-interface LoginResponse {
-  auth_token: string;
-  isUser: boolean;
-  isAdmin: boolean;
-}
-interface LoginParams {
-  username: string;
-  password: string;
-}
-
-const LoginFromBackend = (params: LoginParams) => {
-  const loginClient = new apiClient<LoginResponse>("/login");
-  const setAuth = useAuthStore((s) => s.setAuth);
-  const res = loginClient.login((auth: LoginResponse) => {
-    setAuth({ ...auth, try_invalid_op: false });
-    return auth;
-  }, params);
-
-  return res;
+import axios from "axios";
+import { BASEURL } from "../common/common";
+const login = (username: string, password: string) => {
+  const apiClientInstance = axios.create({
+    baseURL: BASEURL,
+  });
+  const config = {
+    url: "/login",
+    method: "POST",
+    data: {
+      username: username,
+      password: password,
+    },
+  };
+  apiClientInstance.post(config.url, config.data).catch((e) => {
+    console.log(e.message);
+    return {
+      ok: false,
+      message: "登录失败！",
+    };
+  });
 };
-export default LoginFromBackend;
-export type { LoginResponse, LoginParams };
+export default login;

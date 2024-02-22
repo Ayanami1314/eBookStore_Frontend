@@ -2,7 +2,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { Alert, Space } from "antd";
 import useAuthStore from "../auth/useAuthStore";
 
-const PrivateRoute = () => {
+const AdminPrivateRoute = () => {
   const { try_invalid_op, isAdmin } = useAuthStore((s) => s.authinfo);
   const { setInvalidOp } = useAuthStore();
 
@@ -34,4 +34,4 @@ const PrivateRoute = () => {
   return <Outlet />;
 };
 
-export default PrivateRoute;
+export default AdminPrivateRoute;

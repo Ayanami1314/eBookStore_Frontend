@@ -2,15 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
 interface Book {
   id: string;
-  book_name: string;
-  show_title: string;
-  description?: string;
-  author?: string;
-  publish?: string;
-  image?: string; // 图像资源的url
+  title: string;
+  description: string;
+  author: string;
+  price: number;
+  cover: string; // 图像资源的url
+  sales: number;
   ISBN?: string;
-  price?: string;
-  storage?: number;
 }
 // TODO: 使用useItem换掉，还是看api怎么给
 const fetchBooks = () => {

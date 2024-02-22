@@ -1,4 +1,3 @@
-import React from "react";
 import { Book } from "../hooks/useBooks";
 import { Card } from "antd";
 const { Meta } = Card;
@@ -7,6 +6,13 @@ interface BookCardProps {
   isLoading: boolean;
   isError: boolean;
 }
+const limitLengthText = (description: string) => {
+  const limit = 50;
+  if (description.length > limit) {
+    return description.slice(0, limit) + "...";
+  }
+  return description;
+};
 const BookCard = ({ book, isLoading, isError }: BookCardProps) => {
   return (
     <Card
@@ -14,10 +20,13 @@ const BookCard = ({ book, isLoading, isError }: BookCardProps) => {
       bordered={false}
       key={book.id}
       loading={isLoading && !isError}
-      cover={book.image ? <img alt="example" src={book.image} /> : null}
+      cover={book.cover ? <img alt="example" src={book.cover} /> : null}
       style={{ marginBottom: 16 }}
     >
-      <Meta title={book.show_title} description={book.description}></Meta>
+      <Meta
+        title={book.title}
+        description={limitLengthText(book.description)}
+      ></Meta>
     </Card>
   );
 };

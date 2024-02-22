@@ -2,16 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
 interface User {
   id: string;
-  user_name: string;
-  password: string;
-  email: string;
+  nickname: string;
+  balance: string;
 }
 const fetchUsers = () => {
   const apiClientInstance = new apiClient<User>("/users");
   return apiClientInstance.getAll();
 };
 const fetchSingleUser = (id: string) => {
-  const apiClientInstance = new apiClient<User>("/user");
+  const apiClientInstance = new apiClient<User>(`/user`);
   return apiClientInstance.getById(id);
 };
 const useUsers = () => {
