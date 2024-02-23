@@ -8,6 +8,9 @@ import CreateNewUserForm from "../components/CreateNewUserForm";
 import AdminPrivateRoute from "./AdminPrivateRoute";
 import AdminHomePage from "./admin/AdminHomePage";
 import UserPrivateRoute from "./UserPrivateRoute";
+import CartPage from "./CartPage";
+import BookDetailPage from "./BookDetailPage";
+import OrderPage from "./OrderPage";
 /*
 / (home-page)
 NavBar
@@ -40,6 +43,9 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Homepage /> },
           { path: "currentuser", element: <UserDetailPage /> },
+          { path: "cart", element: <CartPage /> },
+          { path: "book/:id", element: <BookDetailPage /> },
+          { path: "order", element: <OrderPage /> },
         ],
       },
     ],

@@ -1,8 +1,10 @@
-import { Form, Input, Button, message } from "antd";
+import { Form, Input, message, Checkbox, Space } from "antd";
 import login from "../services/login";
 import useAuthStore from "../auth/useAuthStore";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { LoginFormPage } from "@ant-design/pro-components";
 interface FormItems {
   username: string;
   password: string;
@@ -13,7 +15,7 @@ const LoginForm = () => {
   const { authinfo, setAuth } = useAuthStore();
   const [, setMessage] = useState("");
   const navigate = useNavigate();
-  const handleSubmit = (values: FormItems) => {
+  const handleSubmit = async (values: FormItems) => {
     login(values.username, values.password).then(({ ok, message }) => {
       setAuth({ ...authinfo, isUser: ok });
       setMessage(message);
@@ -37,25 +39,50 @@ const LoginForm = () => {
   return (
     <>
       {contextHolder}
-      <Form onFinish={handleSubmit}>
-        <Form.Item<FormItems>
+      <LoginFormPage
+        backgroundImageUrl="https://s2.loli.net/2024/02/23/xURbve3prFJnuMo.webp"
+        name="normal_login"
+        className="login-form"
+        initialValues={{ remember: true }}
+        layout="vertical"
+        title="Book Store"
+        subTitle="电子书城"
+        onFinish={handleSubmit}
+        style={{ height: "100vh" }}
+      >
+        <Form.Item
           name="username"
-          label="用户名"
-          rules={[{ required: true, message: "Please input your username." }]}
+          rules={[{ required: true, message: "Please input your Username!" }]}
         >
-          <Input></Input>
+          <Input
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            placeholder="Username"
+          />
         </Form.Item>
-        <Form.Item<FormItems>
+        <Form.Item
           name="password"
-          label="密码"
-          rules={[{ required: true, message: "Please input your password." }]}
+          rules={[{ required: true, message: "Please input your Password!" }]}
         >
-          <Input></Input>
+          <Input
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="password"
+            placeholder="Password"
+          />
         </Form.Item>
-        <Button type="primary" htmlType="submit" key="loginFormButton">
-          {"登录"}
-        </Button>
-      </Form>
+        <Form.Item>
+          <Space>
+            <Form.Item name="remember" valuePropName="checked" noStyle>
+              <Checkbox>{"记住我"}</Checkbox>
+            </Form.Item>
+            {/*TODO: add forgot password */}
+            <a className="login-form-forgot" href="">
+              {"忘记密码？"}
+            </a>
+
+            <Link to="./create">{"立即注册！"}</Link>
+          </Space>
+        </Form.Item>
+      </LoginFormPage>
     </>
   );
 };

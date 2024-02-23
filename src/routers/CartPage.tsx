@@ -1,5 +1,7 @@
+import CartTable from "../components/CartTable";
+
 const CartPage = () => {
-  return <div>CartPage</div>;
+  return <CartTable></CartTable>;
 };
 
 export default CartPage;

@@ -11,9 +11,9 @@ interface NavItem {
 }
 const navItems: NavItem[] = [
   { description: "主页", link: "/home" },
-  { description: "购物车", link: "/cart" },
-  { description: "订单", link: "/bills" },
-  { description: "统计数据", link: "/analysis" },
+  { description: "购物车", link: "/home/cart" },
+  { description: "订单", link: "/home/order" },
+  { description: "统计数据", link: "/home/analysis" },
 ];
 const adminNavItems: NavItem[] = [
   { description: "用户管理", link: "/admin/users" },

@@ -7,7 +7,7 @@ interface User {
 }
 const fetchUsers = () => {
   const apiClientInstance = new apiClient<User>("/users");
-  return apiClientInstance.getAll();
+  return apiClientInstance.getAllItems();
 };
 const fetchSingleUser = (id: string) => {
   const apiClientInstance = new apiClient<User>(`/user`);

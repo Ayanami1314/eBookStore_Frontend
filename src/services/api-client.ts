@@ -17,6 +17,17 @@ class apiClient<T> {
       method: "GET",
       params: params,
     };
+    const data = apiClientInstance
+      .get<T[]>(this.endpoint, config)
+      .then((res) => res.data);
+    return data;
+  };
+  getAllItems = (params?: any) => {
+    const config: AxiosRequestConfig = {
+      url: this.endpoint,
+      method: "GET",
+      params: params,
+    };
     // 后端API设计为 {total: number, items: T[]}
     const data = apiClientInstance
       .get<{ items: T[] }>(this.endpoint, config)
@@ -24,7 +35,7 @@ class apiClient<T> {
     return data;
   };
 
-  getById = (id: string, params?: any) => {
+  getById = (id: string | number, params?: any) => {
     const config: AxiosRequestConfig = {
       url: `${this.endpoint}/${id}`,
       method: "GET",
@@ -51,7 +62,7 @@ class apiClient<T> {
       .then((res) => res.data);
     return response;
   };
-  put = (data: T, params?: any) => {
+  put = (data?: T, params?: any) => {
     const config: AxiosRequestConfig = {
       url: this.endpoint,
       method: "PUT",
@@ -67,26 +78,27 @@ class apiClient<T> {
       params: params,
     };
     const data = apiClientInstance
-      .delete<T>(this.endpoint, config)
+      .delete(this.endpoint, config)
       .then((res) => res.data);
     return data;
   };
-  deleteById = (id: string, params?: any) => {
+  deleteById = (id: string | number, params?: any) => {
     const config: AxiosRequestConfig = {
       url: `${this.endpoint}/${id}`,
       method: "DELETE",
       params: params,
     };
+
     if (!this.endpoint || !id) {
       console.log(this.endpoint, id);
       throw new Error("endpoint or id is null");
     }
     const data = apiClientInstance
-      .delete<T>(config.url as string, config)
+      .delete(config.url as string, params)
       .then((res) => res.data);
     return data;
   };
-  updateById = (id: string, data: T, params?: any) => {
+  updateById = (id: string | number, data: T, params?: any) => {
     const config: AxiosRequestConfig = {
       url: `${this.endpoint}/${id}`,
       method: "PUT",

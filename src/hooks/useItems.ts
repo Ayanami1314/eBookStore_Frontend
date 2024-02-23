@@ -13,7 +13,7 @@ class ItemClass<T extends Item> {
   }
   fetchItems = () => {
     const apiClientInstance = new apiClient<T>(this.multi_endpoint);
-    return apiClientInstance.getAll();
+    return apiClientInstance.getAllItems();
   };
   fetchSingleItem = (id: string) => {
     const apiClientInstance = new apiClient<T>(this.endpoint);

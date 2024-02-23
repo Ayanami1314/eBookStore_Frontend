@@ -1,14 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
 interface Book {
-  id: string;
+  id: number;
   title: string;
   description: string;
   author: string;
   price: number;
   cover: string; // 图像资源的url
   sales: number;
-  ISBN?: string;
 }
 interface searchBooksProp {
   keyword: string;
@@ -17,13 +16,13 @@ interface searchBooksProp {
 }
 const fetchBooks = ({ keyword, pageIndex, pageSize }: searchBooksProp) => {
   const apiClientInstance = new apiClient<Book>("/books");
-  return apiClientInstance.getAll({
+  return apiClientInstance.getAllItems({
     keyword: keyword,
     pageIndex: pageIndex,
     pageSize: pageSize,
   });
 };
-const fetchSingleBook = (id: string) => {
+const fetchSingleBook = (id: string | number) => {
   const apiClientInstance = new apiClient<Book>("/book");
   return apiClientInstance.getById(id);
 };
@@ -39,7 +38,7 @@ const useBooks = ({ keyword, pageIndex, pageSize }: searchBooksProp) => {
   });
   return { data, isError, isLoading };
 };
-const useSingleBook = (id: string) => {
+const useSingleBook = (id: string | number) => {
   const { data, isError, isLoading } = useQuery<Book, Error>({
     queryKey: ["book", id],
     queryFn: () => fetchSingleBook(id),

@@ -9,3 +9,16 @@ div .center {
   align-items: center;
   justify-content: space-around;
 }
+
+/* CSS样式 */
+.center-container {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+  height: 100vh; /* 使用视窗高度确保有足够的空间 */
+}
+
+/* 如果你想要限制Row的宽度，可以设置max-width */
+.center-container .ant-row {
+  max-width: 800px; /* 或者你想要的任何宽度 */
+}
