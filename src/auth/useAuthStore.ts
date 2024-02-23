@@ -4,6 +4,7 @@ interface AuthInfo {
   try_invalid_op: boolean;
   isAdmin: boolean;
   isUser: boolean;
+  password: string;
 }
 interface AuthStoreProp {
   authinfo: AuthInfo;
@@ -17,6 +18,7 @@ const useAuthStore = create<AuthStoreProp>((set) => ({
   authinfo: {
     auth_token: "",
     try_invalid_op: false,
+    password: "",
     isAdmin: false,
     isUser: false,
   },
@@ -26,6 +28,7 @@ const useAuthStore = create<AuthStoreProp>((set) => ({
       ...state,
       authinfo: {
         auth_token: "",
+        password: "",
         try_invalid_op: false,
         isAdmin: false,
         isUser: false,

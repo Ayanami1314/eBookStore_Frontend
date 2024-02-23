@@ -14,17 +14,27 @@ interface searchBooksProp {
   pageIndex: number;
   pageSize: number;
 }
-const fetchBooks = ({ keyword, pageIndex, pageSize }: searchBooksProp) => {
-  const apiClientInstance = new apiClient<Book>("/books");
-  return apiClientInstance.getAllItems({
-    keyword: keyword,
-    pageIndex: pageIndex,
-    pageSize: pageSize,
-  });
+interface BookResponse {
+  total: number;
+  items: Book[];
+}
+const fetchBooks = async ({
+  keyword,
+  pageIndex,
+  pageSize,
+}: searchBooksProp) => {
+  const apiClientInstance = new apiClient<BookResponse>("/books");
+  return apiClientInstance
+    .get({
+      keyword: keyword,
+      pageIndex: pageIndex,
+      pageSize: pageSize,
+    })
+    .then((res) => res.items);
 };
-const fetchSingleBook = (id: string | number) => {
-  const apiClientInstance = new apiClient<Book>("/book");
-  return apiClientInstance.getById(id);
+const fetchSingleBook = async (id: string | number) => {
+  const apiClientInstance = new apiClient<Book>(`/book/${id}`);
+  return apiClientInstance.get();
 };
 const useBooks = ({ keyword, pageIndex, pageSize }: searchBooksProp) => {
   const { data, isError, isLoading } = useQuery<Book[], Error>({

@@ -1,10 +1,10 @@
 import { Form, Input, message, Checkbox, Space } from "antd";
-import login from "../services/login";
 import useAuthStore from "../auth/useAuthStore";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { LoginFormPage } from "@ant-design/pro-components";
+import login from "../services/login";
 interface FormItems {
   username: string;
   password: string;
@@ -15,9 +15,10 @@ const LoginForm = () => {
   const { authinfo, setAuth } = useAuthStore();
   const [, setMessage] = useState("");
   const navigate = useNavigate();
+
   const handleSubmit = async (values: FormItems) => {
     login(values.username, values.password).then(({ ok, message }) => {
-      setAuth({ ...authinfo, isUser: ok });
+      setAuth({ ...authinfo, isUser: ok, password: values.password });
       setMessage(message);
       console.log("ok: " + ok);
       console.log("message: " + message);

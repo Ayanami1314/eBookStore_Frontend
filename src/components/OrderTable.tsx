@@ -2,13 +2,12 @@ import React from "react";
 import { Skeleton, Table } from "antd";
 import type { TableProps } from "antd";
 
-import { useOrder, OrderItem } from "../hooks/useOrder";
+import { useOrder, UserOrder } from "../hooks/useOrder";
 import formatDate from "../utils/date";
 
 const OrderTable: React.FC = () => {
   const { data, isError, isLoading } = useOrder();
-
-  const columns: TableProps<OrderItem>["columns"] = [
+  const columns: TableProps<UserOrder>["columns"] = [
     {
       title: "收货人",
       dataIndex: "receiver",

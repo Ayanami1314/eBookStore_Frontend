@@ -11,6 +11,7 @@ import UserPrivateRoute from "./UserPrivateRoute";
 import CartPage from "./CartPage";
 import BookDetailPage from "./BookDetailPage";
 import OrderPage from "./OrderPage";
+import ResetPasswordPage from "./ResetPasswordPage";
 /*
 / (home-page)
 NavBar
@@ -55,6 +56,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <LoginPage /> },
       { path: "create", element: <CreateNewUserForm /> },
+      { path: "password", element: <ResetPasswordPage /> },
     ],
   },
 

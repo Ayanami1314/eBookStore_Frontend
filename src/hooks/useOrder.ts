@@ -1,14 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
 import { Book } from "./useBooks";
+import { CommonResponse } from "../services/type";
 
-type OrderItem = {
+export type OrderItem = {
+  id: number;
+  number: number;
+  items: Book;
+};
+export type UserOrder = {
   id: 0;
   receiver: string;
   address: string;
   tel: string;
   createdAt: string; // generate Date by new Date(createdAt)
-  items: Book[];
+  items: OrderItem[];
 };
 type OrderPost = {
   address: string;
@@ -17,20 +23,20 @@ type OrderPost = {
   itemIds: number[];
 };
 const fetchOrder = () => {
-  const orderClient = new apiClient<OrderItem>("/order");
+  const orderClient = new apiClient<UserOrder>("/order");
   return orderClient.getAll();
 };
 
 const useOrder = () => {
-  const { data, isError, isLoading } = useQuery<OrderItem[], Error>({
+  const { data, isError, isLoading } = useQuery<UserOrder[], Error>({
     queryKey: ["order"],
     queryFn: fetchOrder,
   });
   return { data, isError, isLoading };
 };
 const postOrder = (order: OrderPost) => {
-  const orderClient = new apiClient<OrderPost>("/order");
-  const data = orderClient.post(order);
+  const orderClient = new apiClient<CommonResponse>("/order");
+  const data = orderClient.post({ data: order });
   return data;
 };
 const useOrderPost = () => {
@@ -48,4 +54,3 @@ const useOrderPost = () => {
   return { postFn, isError, responseData };
 };
 export { useOrder, useOrderPost };
-export type { OrderItem };

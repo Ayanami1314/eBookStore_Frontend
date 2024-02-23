@@ -8,8 +8,3 @@ export const DUMMY_RESPONSE = {
   ok: false,
   message: "网络错误！",
 };
-export interface originalResponse {
-  message: string;
-  ok: boolean;
-  data: any;
-}

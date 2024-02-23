@@ -1,32 +1,13 @@
-import axios from "axios";
-import { PREFIX } from "../common/common";
-import { originalResponse } from "../common/common";
-const login = (
-  username: string,
-  password: string
-): Promise<originalResponse> => {
-  const apiClientInstance = axios.create({
-    baseURL: PREFIX,
-    withCredentials: true,
+import { CommonResponse } from "./type";
+import apiClient from "./api-client";
+
+const login = async (username: string, password: string) => {
+  const apiClientInstance = new apiClient<CommonResponse>("/login");
+  const res = await apiClientInstance.post({
+    data: { username: username, password: password },
   });
-  const config = {
-    url: "/login",
-    method: "POST",
-  };
-  console.log(PREFIX, config);
-  const res = apiClientInstance
-    .post(config.url, { username: username, password: password })
-    .then((res) => {
-      console.log(res);
-      return res.data;
-    })
-    .catch((e) => {
-      console.log(e.message);
-      return {
-        ok: false,
-        message: "登录失败！",
-      } as originalResponse;
-    });
-  return res as Promise<originalResponse>;
+  console.log("登录结果：" + res);
+  return res;
 };
+
 export default login;

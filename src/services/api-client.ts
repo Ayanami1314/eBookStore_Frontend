@@ -1,17 +1,18 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { PREFIX } from "../common/common";
-
+import { RequestProps } from "./type";
 const apiClientInstance = axios.create({
   baseURL: PREFIX,
   withCredentials: true,
 });
 
 class apiClient<T> {
+  // T: return
   endpoint: string;
   constructor(endpoint: string) {
     this.endpoint = endpoint;
   }
-  getAll = (params?: any) => {
+  getAll = (params?: unknown) => {
     const config: AxiosRequestConfig = {
       url: this.endpoint,
       method: "GET",
@@ -22,35 +23,21 @@ class apiClient<T> {
       .then((res) => res.data);
     return data;
   };
-  getAllItems = (params?: any) => {
+
+  get = (params?: unknown) => {
     const config: AxiosRequestConfig = {
       url: this.endpoint,
       method: "GET",
       params: params,
     };
-    // 后端API设计为 {total: number, items: T[]}
-    const data = apiClientInstance
-      .get<{ items: T[] }>(this.endpoint, config)
-      .then((res) => res.data.items);
-    return data;
-  };
 
-  getById = (id: string | number, params?: any) => {
-    const config: AxiosRequestConfig = {
-      url: `${this.endpoint}/${id}`,
-      method: "GET",
-      params: params,
-    };
-    if (!this.endpoint || !id) {
-      console.log(this.endpoint, id);
-      throw new Error("endpoint or id is null");
-    }
     const data = apiClientInstance
       .get<T>(config.url as string, config)
       .then((res) => res.data);
     return data;
   };
-  post = (data: T, params?: any) => {
+
+  post = ({ data, params }: RequestProps) => {
     const config: AxiosRequestConfig = {
       url: this.endpoint,
       method: "POST",
@@ -62,57 +49,27 @@ class apiClient<T> {
       .then((res) => res.data);
     return response;
   };
-  put = (data?: T, params?: any) => {
+
+  put = ({ data, params }: RequestProps) => {
     const config: AxiosRequestConfig = {
       url: this.endpoint,
       method: "PUT",
       params: params,
     };
-    const res = apiClientInstance.put<T>(this.endpoint, data, config);
-    return res;
+    const response = apiClientInstance
+      .put<T>(this.endpoint, data, config)
+      .then((res) => res.data);
+    return response;
   };
-  delete = (params?: any) => {
+  delete = ({ params }: RequestProps) => {
     const config: AxiosRequestConfig = {
       url: this.endpoint,
       method: "DELETE",
       params: params,
     };
-    const data = apiClientInstance
+    const response = apiClientInstance
       .delete(this.endpoint, config)
       .then((res) => res.data);
-    return data;
-  };
-  deleteById = (id: string | number, params?: any) => {
-    const config: AxiosRequestConfig = {
-      url: `${this.endpoint}/${id}`,
-      method: "DELETE",
-      params: params,
-    };
-
-    if (!this.endpoint || !id) {
-      console.log(this.endpoint, id);
-      throw new Error("endpoint or id is null");
-    }
-    const data = apiClientInstance
-      .delete(config.url as string, params)
-      .then((res) => res.data);
-    return data;
-  };
-  updateById = (id: string | number, data: T, params?: any) => {
-    const config: AxiosRequestConfig = {
-      url: `${this.endpoint}/${id}`,
-      method: "PUT",
-      data: data,
-      params: params,
-    };
-    if (!this.endpoint || !id) {
-      console.log(this.endpoint, id);
-      throw new Error("endpoint or id is null");
-    }
-    const response = apiClientInstance
-      .put<T>(config.url as string, data, config)
-      .then((res) => res.data);
-    console.log(response);
     return response;
   };
 }

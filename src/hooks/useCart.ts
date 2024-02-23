@@ -1,7 +1,7 @@
 import apiClient from "../services/api-client";
 import { Book } from "./useBooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CommonResponse } from "../services/type";
 // TODO: refactor with react Query
 type CartItem = { id: number; book: Book; number: number };
 
@@ -11,8 +11,8 @@ const fetchCart = () => {
 };
 
 const deleteCartItem = (id: number) => {
-  const CartApi = new apiClient<CartItem>("/cart");
-  const cart = CartApi.deleteById(id, id); // params: id
+  const CartApi = new apiClient<CommonResponse>("/cart");
+  const cart = CartApi.delete({ params: { id: id } }); // params: id
   return cart;
 };
 interface changeCartItemNumberProps {
@@ -20,19 +20,14 @@ interface changeCartItemNumberProps {
   number: number;
 }
 const changeCartItemNumber = ({ id, number }: changeCartItemNumberProps) => {
-  const CartApi = new apiClient<CartItem>("/cart");
-  const cart = CartApi.updateById(id, {} as CartItem, {
-    id: id,
-    number: number,
-  });
+  const CartApi = new apiClient<CommonResponse>(`/cart/${id}`);
+  const cart = CartApi.put({ params: { id: id, number: number } });
   return cart;
 };
 
 const addCartItem = (bookid: number) => {
-  const CartApi = new apiClient<{ id: number }>("/cart");
-  const cart = CartApi.put(undefined, {
-    bookId: bookid,
-  });
+  const CartApi = new apiClient<CommonResponse>("/cart");
+  const cart = CartApi.put({ params: { bookId: bookid } });
   console.log(cart);
   return cart;
 };
