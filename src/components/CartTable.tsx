@@ -4,16 +4,39 @@ import type { TableProps } from "antd";
 
 import { useCart, CartItem, useDeleteCartItem } from "../hooks/useCart";
 import { Book } from "../hooks/useBooks";
+import useCartStore from "../stores/useCartStore";
 
 const CartTable: React.FC = () => {
+  // NOTE：购物车内物品是悲观更新，但是总价和选择是乐观更新，来让用户知道已经完成操作，避免重复下单
   const { data, isError, isLoading } = useCart();
   type CartItemWithKey = CartItem & { key: number };
-  const [dataWithKey, setDataWithKey] = useState<CartItemWithKey[] | undefined>(
+  type RowData = CartItemWithKey[] | undefined;
+  const [dataWithKey, setDataWithKey] = useState<RowData>(
     data?.map((item: CartItem) => ({
       ...item,
       key: item.id,
     }))
   );
+
+  const { setIds, hasOrder } = useCartStore();
+  const rowSelection = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: RowData) => {
+      console.log(
+        `selectedRowKeys: ${selectedRowKeys}`,
+        "selectedRows: ",
+        selectedRows
+      );
+      const newTotalPrice = selectedRows
+        ? selectedRows.reduce(
+            (total: number, item: CartItemWithKey) =>
+              item ? total + item.number * item.book.price : total,
+            0
+          )
+        : 0;
+      setTotalPrice(newTotalPrice);
+      setIds(selectedRowKeys as number[]);
+    },
+  };
   useEffect(() => {
     setDataWithKey(
       data?.map((item: CartItem) => ({
@@ -44,8 +67,7 @@ const CartTable: React.FC = () => {
     });
     setDataWithKey(newData);
   };
-  const handleSettle = () => {};
-  const columns: TableProps<CartItem>["columns"] = [
+  const columns: TableProps<CartItemWithKey>["columns"] = [
     {
       title: "书名",
       dataIndex: "book",
@@ -75,10 +97,11 @@ const CartTable: React.FC = () => {
       key: "total_price",
       // render第一个参数是当前单元格数据，第二个是本行数据
       render: (_, record, index) => {
-        return (
-          (record.book.price * (dataWithKey ? dataWithKey[index].number : 0)) /
-          100
-        );
+        return record
+          ? (record.book.price *
+              (dataWithKey ? dataWithKey[index].number : 0)) /
+              100
+          : 0;
       },
     },
     {
@@ -103,13 +126,7 @@ const CartTable: React.FC = () => {
       ?.map((d) => d.book.price * d.number)
       .reduce((total, item) => total + item, 0) ?? 0
   );
-  useEffect(() => {
-    setTotalPrice(
-      dataWithKey
-        ?.map((d) => d.book.price * d.number)
-        .reduce((total, item) => total + item, 0) ?? 0
-    );
-  }, [dataWithKey]);
+  useEffect(() => setTotalPrice(0), [data, hasOrder]);
 
   if (isError) {
     console.log("Error in Carttable");
@@ -117,15 +134,18 @@ const CartTable: React.FC = () => {
   if (isLoading) {
     return <Skeleton></Skeleton>;
   }
-
   return (
     <>
       {contextHolder}
-      <Table columns={columns} dataSource={dataWithKey} />
-      {total_price && <p>总价：{total_price / 100}元 </p>}
-      <Button type="default" onClick={handleSettle}>
-        {"去结算"}
-      </Button>
+      <Table
+        rowSelection={{
+          type: "checkbox",
+          ...rowSelection,
+        }}
+        columns={columns}
+        dataSource={dataWithKey}
+      />
+      {total_price !== undefined && <p>总价：{total_price / 100}元 </p>}
     </>
   );
 };
