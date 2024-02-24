@@ -2,14 +2,16 @@ import { Row, Col } from "antd";
 import { useBooks } from "../hooks/useBooks";
 import fakeBooks from "../data_cache/fakeBooks";
 import BookCard from "./BookCard";
+import useBookQuery from "../stores/useBookQuery";
 
 const BookList = () => {
   // gutter: 边距
   // span: n/24 * 父容器最大宽度，类似fr
   let books = fakeBooks;
   // TODO: 实现分页
+  const searchText = useBookQuery((s) => s.searchText);
   const { data, isLoading, isError } = useBooks({
-    keyword: "",
+    keyword: searchText,
     pageIndex: 0,
     pageSize: 100,
   });

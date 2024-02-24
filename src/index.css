@@ -22,3 +22,7 @@ div .center {
 .center-container .ant-row {
   max-width: 800px; /* 或者你想要的任何宽度 */
 }
+
+.margin-box {
+  margin: 20px;
+}

@@ -38,7 +38,7 @@ const fetchSingleBook = async (id: string | number) => {
 };
 const useBooks = ({ keyword, pageIndex, pageSize }: searchBooksProp) => {
   const { data, isError, isLoading } = useQuery<Book[], Error>({
-    queryKey: ["books"],
+    queryKey: ["books", keyword],
     queryFn: () =>
       fetchBooks({
         keyword: keyword,
