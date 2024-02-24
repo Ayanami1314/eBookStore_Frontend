@@ -26,9 +26,9 @@ const OrderTable: React.FC = () => {
     {
       title: "下单时间",
       key: "createdAt",
-      // render text参数是当前单元格数据，record是本行数据
+      // render text参数是当前行对应数据的值，record是本行数据
       render: (text) => {
-        const date = new Date(text);
+        const date = new Date(text.createdAt);
         return formatDate(date);
       },
     },
