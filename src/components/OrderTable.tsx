@@ -1,16 +1,150 @@
-import React from "react";
-import { Skeleton, Table } from "antd";
 import type { TableProps } from "antd";
 
 import { useOrder, UserOrder } from "../hooks/useOrder";
-import formatDate from "../utils/date";
 import OrderCard from "./OrderCard";
+import React, { useEffect, useRef, useState } from "react";
+import { SearchOutlined } from "@ant-design/icons";
+import type { GetRef, TableColumnType } from "antd";
+import { Button, Input, Space, Table, Skeleton } from "antd";
+import type { FilterDropdownProps } from "antd/es/table/interface";
+import Highlighter from "react-highlight-words";
 
+type InputRef = GetRef<typeof Input>;
+type UserOrderWithRenderItems = UserOrder & {
+  bookTitles: string;
+  formatTime: string;
+};
+type DataIndex = keyof UserOrderWithRenderItems;
 const OrderTable: React.FC = () => {
   // TODO: 订单搜索，按时间范围和书籍
+  // HINT： 过滤和排序功能是基于数据源（dataSource）的
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef<InputRef>(null);
+
+  const handleSearch = (
+    selectedKeys: string[],
+    confirm: FilterDropdownProps["confirm"],
+    dataIndex: DataIndex
+  ) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters: () => void) => {
+    clearFilters();
+    setSearchText("");
+  };
+
+  const getColumnSearchProps = (
+    dataIndex: DataIndex
+  ): TableColumnType<UserOrderWithRenderItems> => ({
+    // 下拉搜索筛选框
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+        <Input
+          ref={searchInput}
+          placeholder={`按照书名搜索 ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            handleSearch(selectedKeys as string[], confirm, dataIndex)
+          }
+          style={{ marginBottom: 8, display: "block" }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() =>
+              handleSearch(selectedKeys as string[], confirm, dataIndex)
+            }
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            重置
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({ closeDropdown: false });
+              setSearchText((selectedKeys as string[])[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            筛选
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            关闭
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes((value as string).toLowerCase()),
+    // NOTE: 文档的示例函数，但是select报错，searchInput的类型推断不对
+    // onFilterDropdownOpenChange: (visible) => {
+    //   if (visible) {
+    //     // 100ms之后执行回调
+    //     setTimeout(() => searchInput.current && searchInput.current?.select(), 100);
+    //   }
+    // },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+  const toNewData = (data: UserOrder[] | undefined) => {
+    return data?.map((order) => ({
+      ...order,
+      bookTitles: order.items.map((item) => item.book.title).toString(),
+      formatTime: new Date(order.createdAt).toLocaleString(),
+    }));
+  };
   const { data, isError, isLoading } = useOrder();
-  console.log(data);
-  const columns: TableProps<UserOrder>["columns"] = [
+  const [newdata, setNewData] = useState<
+    UserOrderWithRenderItems[] | undefined
+  >(toNewData(data));
+  useEffect(() => {
+    setNewData(toNewData(data));
+  }, [data]);
+  const columns: TableProps<UserOrderWithRenderItems>["columns"] = [
     {
       title: "收货人",
       dataIndex: "receiver",
@@ -28,12 +162,15 @@ const OrderTable: React.FC = () => {
     },
     {
       title: "下单时间",
-      key: "createdAt",
-      // render text参数是当前行对应数据的值，record是本行数据
-      render: (text) => {
-        const date = new Date(text.createdAt);
-        return formatDate(date);
-      },
+      key: "formatTime",
+      dataIndex: "formatTime",
+      ...getColumnSearchProps("formatTime"),
+    },
+    {
+      title: "书籍汇总",
+      key: "bookTitles",
+      dataIndex: "bookTitles",
+      ...getColumnSearchProps("bookTitles"),
     },
   ];
   if (isError) {
@@ -64,7 +201,7 @@ const OrderTable: React.FC = () => {
           });
         },
       }}
-      dataSource={data}
+      dataSource={newdata}
     />
   );
 };

@@ -58,7 +58,7 @@ const SettleButton: React.FC = () => {
         提交订单
       </Button>
       <Modal
-        title="Basic Modal"
+        title="填写收货信息"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
