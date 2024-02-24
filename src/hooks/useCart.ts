@@ -11,8 +11,8 @@ const fetchCart = () => {
 };
 
 const deleteCartItem = (id: number) => {
-  const CartApi = new apiClient<CommonResponse>("/cart");
-  const cart = CartApi.delete({ params: { id: id } }); // params: id
+  const CartApi = new apiClient<CommonResponse>(`/cart/${id}`);
+  const cart = CartApi.delete(); // params: id
   return cart;
 };
 interface changeCartItemNumberProps {

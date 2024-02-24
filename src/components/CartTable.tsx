@@ -5,6 +5,7 @@ import type { TableProps } from "antd";
 import { useCart, CartItem, useDeleteCartItem } from "../hooks/useCart";
 import { Book } from "../hooks/useBooks";
 import useCartStore from "../stores/useCartStore";
+import { Link } from "react-router-dom";
 
 const CartTable: React.FC = () => {
   // NOTE：购物车内物品是悲观更新，但是总价和选择是乐观更新，来让用户知道已经完成操作，避免重复下单
@@ -49,11 +50,14 @@ const CartTable: React.FC = () => {
   const { deleteFn, isError: deleteError } = useDeleteCartItem();
   const [messageApi, contextHolder] = message.useMessage();
   const handleDelete = (index: number) => {
-    // NOTE：悲观更新
+    // NOTE：乐观更新
     console.log("index:", index);
+    const originData = dataWithKey;
+    setDataWithKey(dataWithKey?.filter((item) => item.id !== index));
     deleteFn(index);
     if (deleteError) {
       messageApi.error("删除失败");
+      setDataWithKey(originData);
     } else {
       messageApi.success("删除成功");
     }
@@ -72,7 +76,9 @@ const CartTable: React.FC = () => {
       title: "书名",
       dataIndex: "book",
       key: "book_name",
-      render: (text: Book) => <a>{text.title}</a>,
+      render: (text: Book) => (
+        <Link to={`/home/book/${text.id}`}>{text.title}</Link>
+      ),
     },
     {
       title: "数量",

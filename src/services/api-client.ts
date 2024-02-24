@@ -61,7 +61,7 @@ class apiClient<T> {
       .then((res) => res.data);
     return response;
   };
-  delete = ({ params }: RequestProps) => {
+  delete = (params?: unknown) => {
     const config: AxiosRequestConfig = {
       url: this.endpoint,
       method: "DELETE",
