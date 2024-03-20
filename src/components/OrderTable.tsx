@@ -8,6 +8,7 @@ import type { GetRef, TableColumnType } from "antd";
 import { Button, Input, Space, Table, Skeleton } from "antd";
 import type { FilterDropdownProps } from "antd/es/table/interface";
 import Highlighter from "react-highlight-words";
+// import moment from "moment";
 
 type InputRef = GetRef<typeof Input>;
 type UserOrderWithRenderItems = UserOrder & {
@@ -16,7 +17,7 @@ type UserOrderWithRenderItems = UserOrder & {
 };
 type DataIndex = keyof UserOrderWithRenderItems;
 const OrderTable: React.FC = () => {
-  // TODO: 订单搜索，按时间范围和书籍
+  // TODO：使用DatePicker完成基于日期范围的筛选
   // HINT： 过滤和排序功能是基于数据源（dataSource）的
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -42,8 +43,9 @@ const OrderTable: React.FC = () => {
   ): TableColumnType<UserOrderWithRenderItems> => ({
     // 下拉搜索筛选框
     filterDropdown: ({
+      // 全是内置参数
       setSelectedKeys,
-      selectedKeys,
+      selectedKeys, // 内置参数：代表用户选择的过滤值的数组
       confirm,
       clearFilters,
       close,
@@ -51,7 +53,7 @@ const OrderTable: React.FC = () => {
       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
         <Input
           ref={searchInput}
-          placeholder={`按照书名搜索 ${dataIndex}`}
+          placeholder={`搜索`}
           value={selectedKeys[0]}
           onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -71,7 +73,7 @@ const OrderTable: React.FC = () => {
             size="small"
             style={{ width: 90 }}
           >
-            Search
+            搜索
           </Button>
           <Button
             onClick={() => clearFilters && handleReset(clearFilters)}
@@ -130,6 +132,7 @@ const OrderTable: React.FC = () => {
         text
       ),
   });
+
   const toNewData = (data: UserOrder[] | undefined) => {
     return data?.map((order) => ({
       ...order,
@@ -165,6 +168,61 @@ const OrderTable: React.FC = () => {
       key: "formatTime",
       dataIndex: "formatTime",
       ...getColumnSearchProps("formatTime"),
+      // filterDropdown: ({
+      //   setSelectedKeys,
+      //   selectedKeys,
+      //   confirm,
+      //   clearFilters,
+      // }) => (
+      //   <Space direction="vertical">
+      //     <DatePicker.RangePicker
+      //       value={
+      //         selectedKeys[0]
+      //           ? [moment(selectedKeys[0]), moment(selectedKeys[1])]
+      //           : []
+      //       }
+      //       onChange={(dates) => {
+      //         console.log(
+      //           "dates:" + dates?.map((date) => date?.format("YYYY-MM-DD"))
+      //         );
+      //         setSelectedKeys(
+      //           dates
+      //             ? [
+      //                 dates[0].format("YYYY-MM-DD"),
+      //                 dates[1].format("YYYY-MM-DD"),
+      //               ]
+      //             : []
+      //         );
+      //       }}
+      //     />
+      //     <Space>
+      //       <Button
+      //         type="primary"
+      //         onClick={confirm}
+      //         size="small"
+      //         style={{ width: 90 }}
+      //       >
+      //         Search
+      //       </Button>
+      //       <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+      //         Reset
+      //       </Button>
+      //     </Space>
+      //   </Space>
+      // ),
+      // // FIXME：has bugs here
+      // // FIXME: onFilter 的value参数本来应该对应selectedKeys，是一个数组，但是实际上只有一个值，导致循环输入第一个和第二个数，出现致命错误
+      // onFilter: (value, record) => {
+      //   const startDate = moment(value[0]);
+      //   const endDate = moment(value[1]);
+      //   const recordDate = moment(record.createdAt);
+      //   // console.log("value:" + value);
+      //   // console.log("recordDate:" + recordDate.format("YYYY-MM-DD"));
+      //   // console.log("startDate:" + startDate.format("YYYY-MM-DD"));
+      //   // console.log("endDate:" + endDate.format("YYYY-MM-DD"));
+      //   return recordDate.isBetween(startDate, endDate, "days", "[]");
+      // // },
+      // render: (text) => moment(text).format("YYYY-MM-DD"),
     },
     {
       title: "书籍汇总",
