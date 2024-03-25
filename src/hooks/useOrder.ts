@@ -4,11 +4,11 @@ import { Book } from "./useBooks";
 import { CommonResponse } from "../services/type";
 
 export type OrderItem = {
-  // TODO: 考虑到书籍价格会变，应该由后端提供（当时的）总价，而不是前端计算
+  // ~~TODO~~: 考虑到书籍价格会变，应该由后端提供（当时的）总价，而不是前端计算
   id: number;
   number: number;
   book: Book;
-  totalPrice?: number; // TODO
+  // totalPrice?: number;
 };
 export type UserOrder = {
   id: 0;

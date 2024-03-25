@@ -8,10 +8,11 @@ interface FormItems {
   tel: string;
 }
 const SettleButton: React.FC = () => {
+  // TODO: 测试后端API缺陷不能接受订单之中书的数量，只能接受书的id，修复它
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const { itemIds: selectIds, setIds, setHasOrder, hasOrder } = useCartStore();
+  const { BuyItems, setItems, setHasOrder, hasOrder } = useCartStore();
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -20,21 +21,28 @@ const SettleButton: React.FC = () => {
   const handleFinish = (values: FormItems) => {
     console.log(`下单数据: ${values.address} ${values.receiver} ${values.tel}`);
     const originHasOrder = hasOrder;
-    const originSelectIds = selectIds;
+    const originSelect = BuyItems;
+    const genIds: number[] = BuyItems.reduce((acc, item) => {
+      const appendArray = Array(item.number).fill(item.id);
+      for (const ele of appendArray) {
+        acc.push(ele);
+      }
+      return acc;
+    }, [] as number[]);
     // NOTE: 乐观更新，先更新前端状态，再等待从后端重新取数据
     setHasOrder(true);
-    setIds([]);
+    setItems([]);
     postFn({
       address: values.address,
       receiver: values.receiver,
       tel: values.tel,
-      itemIds: selectIds,
+      itemIds: genIds,
     });
     if (isError) {
       messageApi.open({ type: "error", content: "下单失败!" });
       // 还原前端数据
       setHasOrder(originHasOrder);
-      setIds(originSelectIds);
+      setItems(originSelect);
     } else {
       messageApi.open({ type: "success", content: "下单成功!" });
     }

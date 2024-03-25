@@ -1,16 +1,20 @@
 import { create } from "zustand";
 
 // 在购物车的Table和提交Button之中传递数据
+interface BuyItem {
+  id: number;
+  number: number;
+}
 interface selectedItems {
   hasOrder: boolean;
-  itemIds: number[];
-  setIds: (ids: number[]) => void;
+  BuyItems: BuyItem[];
+  setItems: (items: BuyItem[]) => void;
   setHasOrder: (has: boolean) => void;
 }
 const useCartStore = create<selectedItems>((set) => ({
   hasOrder: false,
-  itemIds: [],
-  setIds: (ids: number[]) => set({ itemIds: ids }),
+  BuyItems: [],
+  setItems: (items: BuyItem[]) => set({ BuyItems: items }),
   setHasOrder: (has: boolean) => set({ hasOrder: has }),
 }));
 

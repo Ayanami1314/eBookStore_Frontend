@@ -19,7 +19,7 @@ const CartTable: React.FC = () => {
     }))
   );
 
-  const { setIds, hasOrder } = useCartStore();
+  const { setItems, hasOrder } = useCartStore();
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: RowData) => {
       console.log(
@@ -35,7 +35,13 @@ const CartTable: React.FC = () => {
           )
         : 0;
       setTotalPrice(newTotalPrice);
-      setIds(selectedRowKeys as number[]);
+      if (selectedRows)
+        setItems(
+          selectedRowKeys.map((key, index) => ({
+            id: key as number,
+            number: selectedRows[index].number,
+          }))
+        );
     },
   };
   useEffect(() => {

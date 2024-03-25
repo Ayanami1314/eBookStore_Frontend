@@ -12,6 +12,7 @@ import CartPage from "./CartPage";
 import BookDetailPage from "./BookDetailPage";
 import OrderPage from "./OrderPage";
 import ResetPasswordPage from "./ResetPasswordPage";
+import AnalysisPage from "./AnalysisPage";
 /*
 / (home-page)
 NavBar
@@ -47,6 +48,7 @@ const router = createBrowserRouter([
           { path: "cart", element: <CartPage /> },
           { path: "book/:id", element: <BookDetailPage /> },
           { path: "order", element: <OrderPage /> },
+          { path: "analysis", element: <AnalysisPage /> },
         ],
       },
     ],

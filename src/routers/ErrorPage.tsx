@@ -8,7 +8,7 @@ const ErrorPage = () => {
   const navigate = useNavigate();
   const onClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    navigate("/");
+    navigate("/home");
   };
   return (
     <>
