@@ -8,6 +8,7 @@ interface Book {
   price: number;
   cover: string; // 图像资源的url
   sales: number;
+  isbn?: string;
 }
 interface searchBooksProp {
   keyword: string;

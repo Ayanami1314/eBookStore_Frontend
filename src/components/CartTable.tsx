@@ -3,7 +3,7 @@ import { Button, InputNumber, Skeleton, Space, Table, message } from "antd";
 import type { TableProps } from "antd";
 
 import { useCart, CartItem, useDeleteCartItem } from "../hooks/useCart";
-import { Book } from "../hooks/useBooks";
+import { Book } from "../hooks/useBook";
 import useCartStore from "../stores/useCartStore";
 import { Link } from "react-router-dom";
 

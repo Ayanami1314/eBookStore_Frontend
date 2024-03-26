@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
-import { Book } from "./useBooks";
+import { Book } from "./useBook";
 import { CommonResponse } from "../services/type";
 
 export type OrderItem = {

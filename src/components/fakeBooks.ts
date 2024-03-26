@@ -1,4 +1,4 @@
-import { Book } from "../hooks/useBooks";
+import { Book } from "../hooks/useBook";
 
 const fakeBooks: Book[] = new Array(10).fill(0).map((item, index) => ({
   id: index,

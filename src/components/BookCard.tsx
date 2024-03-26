@@ -1,4 +1,4 @@
-import { Book } from "../hooks/useBooks";
+import { Book } from "../hooks/useBook";
 import { Card } from "antd";
 import { Link } from "react-router-dom";
 const { Meta } = Card;

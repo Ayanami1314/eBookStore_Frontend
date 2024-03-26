@@ -1,4 +1,4 @@
-import { useSingleBook } from "../hooks/useBooks";
+import { useSingleBook } from "../hooks/useBook";
 import { useParams } from "react-router-dom";
 import { useAddCartItem } from "../hooks/useCart";
 import { message, Skeleton } from "antd";

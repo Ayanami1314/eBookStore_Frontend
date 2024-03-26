@@ -1,5 +1,5 @@
 import apiClient from "../services/api-client";
-import { Book } from "./useBooks";
+import { Book } from "./useBook";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CommonResponse } from "../services/type";
 // TODO: refactor with react Query

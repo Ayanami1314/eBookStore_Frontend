@@ -1,12 +1,18 @@
 import { ProCard } from "@ant-design/pro-components";
-import { Button, Card, Divider, Typography } from "antd";
-import { Book } from "../hooks/useBooks";
+import { Button, Card, Divider, Flex, Typography } from "antd";
+import { Book } from "../hooks/useBook";
+import useAuthStore from "../auth/useAuthStore";
 
 interface DetailProps {
   book: Book;
   addToCart: (id: number) => void;
 }
 const BookDetailCard = ({ book, addToCart }: DetailProps) => {
+  const authinfo = useAuthStore((s) => s.authinfo);
+  const isAdmin = authinfo.isAdmin;
+  const handleDelete = (id: number) => {
+    console.log(id);
+  };
   return (
     <ProCard split="vertical">
       <ProCard colSpan="30%">
@@ -33,9 +39,21 @@ const BookDetailCard = ({ book, addToCart }: DetailProps) => {
           <Typography.Paragraph>{book.description}</Typography.Paragraph>
         </Typography>
         <Divider />
-        <Button type="default" size="large" onClick={() => addToCart(book.id)}>
-          {"加入购物车"}
-        </Button>
+
+        <Flex gap="middle">
+          <Button
+            type="default"
+            size="large"
+            onClick={() => addToCart(book.id)}
+          >
+            {"加入购物车"}
+          </Button>
+          {isAdmin && (
+            <Button danger size="large" onClick={() => handleDelete(book.id)}>
+              {"删除此书籍"}
+            </Button>
+          )}
+        </Flex>
       </ProCard>
     </ProCard>
   );
