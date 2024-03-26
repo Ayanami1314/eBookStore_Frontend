@@ -1,7 +1,7 @@
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import MenuItem from "antd/es/menu/MenuItem";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import UserIcon from "./UserIcon";
+import UserIcon from "../components/UserIcon";
 import useAuthStore from "../auth/useAuthStore";
 
 const { Header, Content, Footer } = Layout;
@@ -13,13 +13,13 @@ const navItems: NavItem[] = [
   { description: "主页", link: "/home" },
   { description: "购物车", link: "/home/cart" },
   { description: "订单", link: "/home/order" },
-  { description: "统计数据", link: "/home/analysis" },
+  { description: "购买统计", link: "/home/analysis" },
 ];
 const adminNavItems: NavItem[] = [
-  { description: "用户管理", link: "/admin/users" },
-  { description: "书籍管理", link: "/admin/items" },
-  { description: "订单管理", link: "/admin/bills" },
-  { description: "统计管理数据", link: "/admin/analysis" },
+  { description: "用户管理", link: "/home/admin/user" },
+  { description: "书籍管理", link: "/home/admin/book" },
+  { description: "订单管理", link: "/home/admin/order" },
+  { description: "销售统计", link: "/home/admin/analysis" },
 ];
 const loginItem: NavItem = { description: "登录", link: "/login" };
 
@@ -39,7 +39,7 @@ const HomeLayout = () => {
     </MenuItem>
   ));
   const adminMenuItems = adminNavItems.map((item, index) => (
-    <MenuItem key={index}>
+    <MenuItem key={menuItems.length + index}>
       <Link to={item.link}>{item.description} </Link>
     </MenuItem>
   ));
@@ -80,8 +80,9 @@ const HomeLayout = () => {
           style={{ flex: 1, minWidth: 0 }}
           // items={menuItems} 由于要使得登录在右边，所以不能用items，会覆盖掉children
         >
-          {isAdmin ? adminMenuItems : menuItems}
-          {isUser ? UserIconMenuItem : loginMenuItem}
+          {isUser && menuItems}
+          {isAdmin && adminMenuItems}
+          {isUser || isAdmin ? UserIconMenuItem : loginMenuItem}
         </Menu>
       </Header>
       <Content style={{ padding: "0 48px" }}>

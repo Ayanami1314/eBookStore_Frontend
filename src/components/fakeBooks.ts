@@ -1,11 +1,13 @@
 import { Book } from "../hooks/useBooks";
 
 const fakeBooks: Book[] = new Array(10).fill(0).map((item, index) => ({
-  id: index.toString(),
-  book_name: `book ${index}`,
-  show_title: `book ${index} title`,
+  id: index,
+  author: `book ${index}`,
+  title: `book ${index} title`,
   description: `book ${index} description`,
-  image:
+  price: 0,
+  sales: 0,
+  cover:
     "https://img.shields.io/github/issues/Okabe-Rintarou-0/BookStore-Frontend",
 }));
 

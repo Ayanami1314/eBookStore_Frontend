@@ -18,7 +18,13 @@ const LoginForm = () => {
 
   const handleSubmit = async (values: FormItems) => {
     login(values.username, values.password).then(({ ok, message }) => {
-      setAuth({ ...authinfo, isUser: ok, password: values.password });
+      // TODO: 现在这里是直接给admin权限
+      setAuth({
+        ...authinfo,
+        isUser: ok,
+        isAdmin: ok,
+        password: values.password,
+      });
       setMessage(message);
       console.log("ok: " + ok);
       console.log("message: " + message);
