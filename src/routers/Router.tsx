@@ -12,11 +12,13 @@ import BookDetailPage from "../pages/BookDetailPage";
 import OrderPage from "../pages/OrderPage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import AnalysisPage from "../pages/AnalysisPage";
-import UserListPage from "../pages/UserListPage";
+import UserListPage from "../pages/Admin/UserListPage";
 import AdminUserAnalysisPage from "../pages/Admin/AdminUserAnalysisPage";
 import AdminBookAnalysisPage from "../pages/Admin/AdminBookAnalysisPage";
+import AdminBookPage from "../pages/Admin/AdminBookPage";
+import AdminOrderPage from "../pages/Admin/AdminOrderPage";
 
-const router = createBrowserRouter([
+const Router = createBrowserRouter([
   {
     path: "/",
     element: <UserPrivateRoute />,
@@ -47,6 +49,18 @@ const router = createBrowserRouter([
                   { path: "user", element: <AdminUserAnalysisPage /> },
                 ],
               },
+              {
+                path: "book",
+                element: <AdminBookPage />,
+              },
+              {
+                path: "user",
+                element: <UserListPage />,
+              },
+              {
+                path: "order",
+                element: <AdminOrderPage />,
+              },
             ],
           },
         ],
@@ -62,4 +76,4 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-export default router;
+export default Router;

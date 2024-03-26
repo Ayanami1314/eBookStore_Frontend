@@ -55,7 +55,7 @@ const HomeLayout = () => {
   );
   const UserIconMenuItem = (
     <MenuItem
-      key={menuItems.length + 2}
+      key={menuItems.length + adminNavItems.length + 2}
       style={{ position: "absolute", right: 0, marginRight: "48px" }}
     >
       <UserIcon></UserIcon>
