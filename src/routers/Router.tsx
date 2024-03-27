@@ -4,7 +4,6 @@ import LoginPage from "../pages/LoginPage";
 import HomeLayout from "../pages/HomeLayout";
 import UserDetailPage from "../pages/UserDetailPage";
 import ErrorPage from "../pages/ErrorPage";
-import CreateNewUserForm from "../components/CreateNewUserForm";
 import AdminPrivateRoute from "./AdminPrivateRoute";
 import UserPrivateRoute from "./UserPrivateRoute";
 import CartPage from "../pages/CartPage";
@@ -17,6 +16,7 @@ import AdminUserAnalysisPage from "../pages/Admin/AdminUserAnalysisPage";
 import AdminBookAnalysisPage from "../pages/Admin/AdminBookAnalysisPage";
 import AdminBookPage from "../pages/Admin/AdminBookPage";
 import AdminOrderPage from "../pages/Admin/AdminOrderPage";
+import CreateNewUserPage from "../pages/CreateNewUserPage";
 
 const Router = createBrowserRouter([
   {
@@ -71,7 +71,7 @@ const Router = createBrowserRouter([
     path: "/login",
     children: [
       { index: true, element: <LoginPage /> },
-      { path: "create", element: <CreateNewUserForm /> },
+      { path: "create", element: <CreateNewUserPage /> },
       { path: "password", element: <ResetPasswordPage /> },
     ],
   },

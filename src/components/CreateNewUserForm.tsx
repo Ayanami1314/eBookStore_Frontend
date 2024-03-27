@@ -23,7 +23,7 @@ const CreateNewUserForm = () => {
       <Form onFinish={onFinish}>
         <Form.Item<FormValues>
           name="username"
-          label="用户名"
+          label="用户名称"
           rules={[{ required: true, message: "Please input your username." }]}
         >
           <Input></Input>
@@ -33,7 +33,7 @@ const CreateNewUserForm = () => {
           label="输入密码"
           rules={[{ required: true, message: "Please input your password." }]}
         >
-          <Input></Input>
+          <Input.Password />
         </Form.Item>
         <Form.Item<FormValues>
           name="repeatPassword"
