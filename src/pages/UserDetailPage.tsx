@@ -1,5 +1,7 @@
+import UserDetailCard from "../components/UserDetailCard";
+
 const UserDetailPage = () => {
-  return <div>UserDetailPage</div>;
+  return <UserDetailCard />;
 };
 
 export default UserDetailPage;
