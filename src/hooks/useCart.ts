@@ -2,7 +2,8 @@ import apiClient from "../services/api-client";
 import { Book } from "./useBook";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CommonResponse } from "../services/type";
-// TODO: refactor with react Query
+
+// TODO: 目前的后端不支持购物车的搜索
 type CartItem = { id: number; book: Book; number: number };
 
 const fetchCart = () => {

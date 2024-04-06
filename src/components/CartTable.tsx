@@ -19,7 +19,7 @@ const CartTable: React.FC = () => {
     }))
   );
 
-  const { setItems, hasOrder } = useCartStore();
+  const { setItems } = useCartStore();
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: RowData) => {
       console.log(
@@ -138,7 +138,7 @@ const CartTable: React.FC = () => {
       ?.map((d) => d.book.price * d.number)
       .reduce((total, item) => total + item, 0) ?? 0
   );
-  useEffect(() => setTotalPrice(0), [data, hasOrder]);
+  useEffect(() => setTotalPrice(0), [data]);
 
   if (isError) {
     console.log("Error in Carttable");
