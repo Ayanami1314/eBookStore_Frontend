@@ -1,7 +1,7 @@
-import React from "react";
 import { ProForm, ProFormItem, ProFormText } from "@ant-design/pro-components";
-import { Col, Row, Space, message } from "antd";
+import { Col, Flex, Row, Space, message } from "antd";
 import UserUploadImage from "./UserUploadImage";
+import TextArea from "antd/es/input/TextArea";
 
 const UserDetailCard = () => {
   const waitTime = (time: number = 100) => {
@@ -12,23 +12,21 @@ const UserDetailCard = () => {
     });
   };
 
-  const formItemLayout = {
-    labelCol: { span: 4 },
-    wrapperCol: { span: 14 },
-  };
-
   return (
     <ProForm<{
       name: string;
-      company?: string;
-      useMode?: string;
+      email?: string;
+      avatar?: string; // TODO?
     }>
-      {...formItemLayout}
+      // style={{
+      //   margin: 16,
+      //   flex: 1,
+      // }}
       submitter={{
         render: (props, doms) => {
           return (
             <Row>
-              <Col span={20} offset={0}>
+              <Col span={2} offset={11}>
                 <Space>{doms}</Space>
               </Col>
             </Row>
@@ -50,16 +48,21 @@ const UserDetailCard = () => {
       }}
     >
       <ProFormText
-        width="md"
+        style={{ flex: 1 }}
         name="name"
         label="用户名称"
         tooltip="最长为 24 位"
         placeholder="请输入名称"
       />
-      <ProFormText width="md" name="email" label="用户邮箱" />
-      <ProFormItem name="avatar" label="上传头像">
-        <UserUploadImage />
-      </ProFormItem>
+      <ProFormText style={{ flex: 1 }} name="email" label="用户邮箱" />
+      <Flex style={{ flex: 1 }}>
+        <ProFormItem name="avatar" label="上传头像" style={{ flex: 2 }}>
+          <UserUploadImage />
+        </ProFormItem>
+        <ProFormItem name="notes" label="个性签名" style={{ flex: 8 }}>
+          <TextArea rows={4}></TextArea>
+        </ProFormItem>
+      </Flex>
     </ProForm>
   );
 };

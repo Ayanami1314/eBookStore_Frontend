@@ -51,6 +51,7 @@ const UserUploadImage: React.FC = () => {
   return (
     <Upload
       name="avatar"
+      style={{ flex: 1 }}
       listType="picture-card"
       className="avatar-uploader"
       showUploadList={false}
