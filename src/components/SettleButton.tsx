@@ -12,7 +12,7 @@ const SettleButton: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const { BuyItems, setItems, setHasOrder, hasOrder } = useCartStore();
+  const { BuyItems, setItems } = useCartStore();
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -20,7 +20,6 @@ const SettleButton: React.FC = () => {
   const { postFn, isError, responseData } = useOrderPost();
   const handleFinish = (values: FormItems) => {
     console.log(`下单数据: ${values.address} ${values.receiver} ${values.tel}`);
-    const originHasOrder = hasOrder;
     const originSelect = BuyItems;
     const genIds: number[] = BuyItems.reduce((acc, item) => {
       const appendArray = Array(item.number).fill(item.id);
@@ -30,7 +29,6 @@ const SettleButton: React.FC = () => {
       return acc;
     }, [] as number[]);
     // NOTE: 乐观更新，先更新前端状态，再等待从后端重新取数据
-    setHasOrder(true);
     setItems([]);
     postFn({
       address: values.address,
@@ -41,7 +39,6 @@ const SettleButton: React.FC = () => {
     if (isError) {
       messageApi.open({ type: "error", content: "下单失败!" });
       // 还原前端数据
-      setHasOrder(originHasOrder);
       setItems(originSelect);
     } else {
       messageApi.open({ type: "success", content: "下单成功!" });

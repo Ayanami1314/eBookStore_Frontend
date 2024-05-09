@@ -3,6 +3,7 @@ import MenuItem from "antd/es/menu/MenuItem";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import UserIcon from "../components/UserIcon";
 import useAuthStore from "../auth/useAuthStore";
+import { useMe } from "../hooks/useUsers";
 
 const { Header, Content, Footer } = Layout;
 interface NavItem {
@@ -55,10 +56,22 @@ const HomeLayout = () => {
   );
   const UserIconMenuItem = (
     <MenuItem
-      key={menuItems.length + adminNavItems.length + 2}
-      style={{ position: "absolute", right: 0, marginRight: "48px" }}
+      key={menuItems.length + adminNavItems.length + 3}
+      style={{ marginLeft: "auto" }}
     >
       <UserIcon></UserIcon>
+    </MenuItem>
+  );
+  const { data } = useMe();
+  const UserTextItem = (
+    <MenuItem
+      key={menuItems.length + adminNavItems.length + 2}
+      style={{
+        marginLeft: "auto",
+        fontSize: "1.5em",
+      }}
+    >
+      Hello, {data?.nickname}!
     </MenuItem>
   );
   return (
@@ -77,11 +90,18 @@ const HomeLayout = () => {
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={["0"]}
-          style={{ flex: 1, minWidth: 0 }}
+          style={{
+            flex: 1,
+            minWidth: 0,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
           // items={menuItems} 由于要使得登录在右边，所以不能用items，会覆盖掉children
+          // 左右分开
         >
           {isUser && menuItems}
           {isAdmin && adminMenuItems}
+          {UserTextItem}
           {isUser || isAdmin ? UserIconMenuItem : loginMenuItem}
         </Menu>
       </Header>

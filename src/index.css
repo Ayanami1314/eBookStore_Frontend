@@ -26,3 +26,7 @@ div .center {
 .margin-box {
   margin: 20px;
 }
+
+.react-icons {
+  vertical-align: middle;
+}

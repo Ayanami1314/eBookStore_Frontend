@@ -6,16 +6,16 @@ interface BuyItem {
   number: number;
 }
 interface selectedItems {
-  hasOrder: boolean;
   BuyItems: BuyItem[];
   setItems: (items: BuyItem[]) => void;
-  setHasOrder: (has: boolean) => void;
+  searchText: string;
+  setSearchText: (text: string) => void;
 }
 const useCartStore = create<selectedItems>((set) => ({
-  hasOrder: false,
   BuyItems: [],
   setItems: (items: BuyItem[]) => set({ BuyItems: items }),
-  setHasOrder: (has: boolean) => set({ hasOrder: has }),
+  searchText: "",
+  setSearchText: (text: string) => set({ searchText: text }),
 }));
 
 export default useCartStore;
