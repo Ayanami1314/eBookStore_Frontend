@@ -17,6 +17,7 @@ class apiClient<T> {
       url: this.endpoint,
       method: "GET",
       params: params,
+      withCredentials: true,
     };
     const data = apiClientInstance
       .get<T[]>(this.endpoint, config)
@@ -29,6 +30,7 @@ class apiClient<T> {
       url: this.endpoint,
       method: "GET",
       params: params,
+      withCredentials: true,
     };
 
     const data = apiClientInstance
@@ -43,6 +45,7 @@ class apiClient<T> {
       method: "POST",
       data: data,
       params: params,
+      withCredentials: true,
     };
     const response = apiClientInstance
       .post<T>(this.endpoint, data, config)
@@ -55,6 +58,7 @@ class apiClient<T> {
       url: this.endpoint,
       method: "PUT",
       params: params,
+      withCredentials: true,
     };
     const response = apiClientInstance
       .put<T>(this.endpoint, data, config)
@@ -66,6 +70,7 @@ class apiClient<T> {
       url: this.endpoint,
       method: "DELETE",
       params: params,
+      withCredentials: true,
     };
     const response = apiClientInstance
       .delete(this.endpoint, config)

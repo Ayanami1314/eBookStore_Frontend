@@ -17,7 +17,7 @@ interface searchBooksProp {
 }
 interface BookResponse {
   total: number;
-  items: Book[];
+  books: Book[];
 }
 const fetchBooks = async ({
   keyword,
@@ -31,7 +31,7 @@ const fetchBooks = async ({
       pageIndex: pageIndex,
       pageSize: pageSize,
     })
-    .then((res) => res.items);
+    .then((res) => res.books);
 };
 const fetchSingleBook = async (id: string | number) => {
   const apiClientInstance = new apiClient<Book>(`/book/${id}`);

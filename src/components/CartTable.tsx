@@ -89,11 +89,11 @@ const CartTable: React.FC = () => {
     {
       title: "数量",
       key: "number",
-      render: (index) => (
+      render: (record) => (
         <InputNumber
-          defaultValue={index.number}
+          defaultValue={0}
           onChange={(value: number | null) =>
-            handleNumberChange(index.id, value ?? 0)
+            handleNumberChange(record.id, value ?? 0)
           }
         ></InputNumber>
       ),
