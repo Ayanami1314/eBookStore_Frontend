@@ -32,7 +32,7 @@ const CartTable: React.FC = () => {
         : []
     );
   }, [data, setItems]);
-
+  const [selectRows, setSelect] = useState<RowData>([]);
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: RowData) => {
       console.log(
@@ -40,6 +40,7 @@ const CartTable: React.FC = () => {
         "selectedRows: ",
         selectedRows
       );
+      setSelect(selectedRows);
       console.log(BuyItems);
       const newTotalPrice = selectedRows
         ? selectedRows.reduce(
@@ -96,6 +97,10 @@ const CartTable: React.FC = () => {
     }
   };
   const handleNumberChange = (id: number, value: number) => {
+    if (value < 0) {
+      messageApi.error("数量不能小于0");
+      return;
+    }
     const newData = dataWithKey?.map((item) =>
       item.id === id ? { ...item, number: value } : item
     );
@@ -106,8 +111,27 @@ const CartTable: React.FC = () => {
         item.id === id ? { ...item, number: value } : item
       )
     );
+    const newSelectRows = selectRows?.map((item) =>
+      item.id === id ? { ...item, number: value } : item
+    );
     changeFn({ id: id, number: value });
+    setSelect(newSelectRows);
+    setTotalPrice(cal_totalprice(newSelectRows));
   };
+  const cal_totalprice = (data: CartItemWithKey[] | undefined) => {
+    return data
+      ? data
+          .map((d) =>
+            typeof d.book.price === "number" && typeof d.number === "number"
+              ? d.book.price * d.number
+              : 0
+          )
+          .reduce((total, item) => total + item, 0)
+      : 0;
+  };
+  const [total_price, setTotalPrice] = useState<number>(
+    cal_totalprice(selectRows)
+  );
   const columns: TableProps<CartItemWithKey>["columns"] = [
     {
       title: "书名",
@@ -164,17 +188,7 @@ const CartTable: React.FC = () => {
       ),
     },
   ];
-  const [total_price, setTotalPrice] = useState<number>(
-    Array.isArray(dataWithKey)
-      ? dataWithKey
-          .map((d) =>
-            typeof d.book.price === "number" && typeof d.number === "number"
-              ? d.book.price * d.number
-              : 0
-          )
-          .reduce((total, item) => total + item, 0)
-      : 0
-  );
+
   if (isError) {
     console.log("Error in Carttable");
   }
