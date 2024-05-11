@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Modal, message } from "antd";
-import useCartStore from "../stores/useCartStore";
+import useCartStore, { BuyItem } from "../stores/useCartStore";
 import { useOrderPost } from "../hooks/useOrder";
+import { CommonResponse } from "../services/type";
 interface FormItems {
   receiver: string;
   address: string;
   tel: string;
 }
 const SettleButton: React.FC = () => {
-  // TODO: 测试后端API缺陷不能接受订单之中书的数量，只能接受书的id，修复它
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
@@ -16,34 +16,48 @@ const SettleButton: React.FC = () => {
   const showModal = () => {
     setIsModalOpen(true);
   };
+  const [backupItems, setBackupItems] = useState<BuyItem[]>(BuyItems);
 
-  const { postFn, isError, responseData } = useOrderPost();
+  const postOnSuccess = (data: CommonResponse) => {
+    console.log(data);
+    messageApi.open({ type: "success", content: "订单提交成功!" });
+  };
+
+  const { postFn, isSuccess, responseData } = useOrderPost();
+  useEffect(() => {
+    if (isSuccess) {
+      if (responseData?.ok)
+        messageApi.open({ type: "success", content: "下单成功!" });
+      else {
+        messageApi.open({ type: "error", content: "下单失败!" });
+        setItems(backupItems);
+      }
+    }
+  }, [messageApi, isSuccess, responseData, setItems, backupItems]);
   const handleFinish = (values: FormItems) => {
     console.log(`下单数据: ${values.address} ${values.receiver} ${values.tel}`);
-    const originSelect = BuyItems;
-    const genIds: number[] = BuyItems.reduce((acc, item) => {
-      const appendArray = Array(item.number).fill(item.id);
-      for (const ele of appendArray) {
-        acc.push(ele);
-      }
-      return acc;
-    }, [] as number[]);
-    // NOTE: 乐观更新，先更新前端状态，再等待从后端重新取数据
-    setItems([]);
-    postFn({
-      address: values.address,
-      receiver: values.receiver,
-      tel: values.tel,
-      itemIds: genIds,
-    });
-    if (isError) {
-      messageApi.open({ type: "error", content: "下单失败!" });
-      // 还原前端数据
-      setItems(originSelect);
-    } else {
-      messageApi.open({ type: "success", content: "下单成功!" });
+    console.log("buyItems: ");
+    console.log(BuyItems);
+    // NOTE: 提交时一次性更新全部商品数量，先更新前端状态，再等待从后端重新取数据
+    const newBackupItems = [...BuyItems]; // ATTETION: set异步
+    setBackupItems(newBackupItems);
+    setItems(BuyItems.filter((item) => !item.buy));
+    if (newBackupItems.length === 0) {
+      messageApi.open({ type: "error", content: "未选择购买的物品!" });
+      return;
     }
-    console.log("下单结果:" + responseData);
+    const postItems = newBackupItems.filter((item) => item.buy);
+    const postItemIds = postItems.map((item) => item.id);
+    console.log(postItemIds);
+    postFn(
+      {
+        address: values.address,
+        receiver: values.receiver,
+        tel: values.tel,
+        itemIds: postItemIds,
+      },
+      { onSuccess: postOnSuccess } // Add the onSuccess property
+    );
   };
   const handleOk = () => {
     form.submit(); // 调用表单提交onFinish，将ok按键点击和表单提交绑定

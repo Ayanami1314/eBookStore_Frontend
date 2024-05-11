@@ -63,6 +63,7 @@ const HomeLayout = () => {
     </MenuItem>
   );
   const { data } = useMe();
+  console.log(data?.nickname);
   const UserTextItem = (
     <MenuItem
       key={menuItems.length + adminNavItems.length + 2}

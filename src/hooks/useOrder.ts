@@ -41,18 +41,28 @@ const postOrder = (order: OrderPost) => {
   const data = orderClient.post({ data: order });
   return data;
 };
-const useOrderPost = () => {
+const useOrderPost = (userOnSuccess?: () => void, userOnError?: () => void) => {
   const queryClient = useQueryClient();
   const {
     mutate: postFn,
     isError,
+    isPending,
+    isSuccess,
     data: responseData,
   } = useMutation({
     mutationFn: postOrder,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["order"] });
+      console.log("order post succeed!");
+      userOnSuccess && userOnSuccess();
+    },
+    onError: () => {
+      console.log("order post failed!");
+      console.log(responseData);
+      userOnError && userOnError();
     },
   });
-  return { postFn, isError, responseData };
+  return { postFn, isError, isPending, isSuccess, responseData };
 };
 export { useOrder, useOrderPost };
+export type { OrderPost };

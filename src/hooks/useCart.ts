@@ -17,19 +17,18 @@ const deleteCartItem = (id: number) => {
   return cart;
 };
 interface changeCartItemNumberProps {
-  id: string;
+  id: number;
   number: number;
 }
 const changeCartItemNumber = ({ id, number }: changeCartItemNumberProps) => {
   const CartApi = new apiClient<CommonResponse>(`/cart/${id}`);
-  const cart = CartApi.put({ params: { id: id, number: number } });
+  const cart = CartApi.put({ params: { number: number } });
   return cart;
 };
 
 const addCartItem = (bookid: number) => {
   const CartApi = new apiClient<CommonResponse>("/cart");
   const cart = CartApi.put({ params: { bookId: bookid } });
-  console.log(cart);
   return cart;
 };
 
@@ -65,25 +64,38 @@ const useAddCartItem = () => {
     mutationFn: addCartItem,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart", "all"] });
+      console.log("addCartItem success");
     },
   });
 
   return { addFn, isError, responseData };
 };
-const useChangeCartItemNumber = () => {
+const useChangeCartItemNumber = (
+  successCallback?: (data: CommonResponse) => void,
+  failCallback?: (data: CommonResponse) => void
+) => {
   const queryClient = useQueryClient();
   const {
     mutate: changeFn,
     isError,
+    isPending,
     data: responseData,
   } = useMutation({
     mutationFn: changeCartItemNumber,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data && data.ok) {
+        console.log("changeCartItemNumber success");
+        successCallback && successCallback(data);
+        return;
+      } else {
+        console.log("changeCartItemNumber failed");
+        failCallback && failCallback(data);
+      }
       queryClient.invalidateQueries({ queryKey: ["cart", "all"] });
     },
   });
 
-  return { changeFn, isError, responseData };
+  return { changeFn, isError, isPending, responseData };
 };
 export { useCart, useAddCartItem, useChangeCartItemNumber, useDeleteCartItem };
 export type { CartItem };

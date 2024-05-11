@@ -146,6 +146,7 @@ const OrderTable: React.FC = () => {
   >(toNewData(data));
   useEffect(() => {
     setNewData(toNewData(data));
+    console.log("Order: ", data);
   }, [data]);
   const columns: TableProps<UserOrderWithRenderItems>["columns"] = [
     {
@@ -168,61 +169,6 @@ const OrderTable: React.FC = () => {
       key: "formatTime",
       dataIndex: "formatTime",
       ...getColumnSearchProps("formatTime"),
-      // filterDropdown: ({
-      //   setSelectedKeys,
-      //   selectedKeys,
-      //   confirm,
-      //   clearFilters,
-      // }) => (
-      //   <Space direction="vertical">
-      //     <DatePicker.RangePicker
-      //       value={
-      //         selectedKeys[0]
-      //           ? [moment(selectedKeys[0]), moment(selectedKeys[1])]
-      //           : []
-      //       }
-      //       onChange={(dates) => {
-      //         console.log(
-      //           "dates:" + dates?.map((date) => date?.format("YYYY-MM-DD"))
-      //         );
-      //         setSelectedKeys(
-      //           dates
-      //             ? [
-      //                 dates[0].format("YYYY-MM-DD"),
-      //                 dates[1].format("YYYY-MM-DD"),
-      //               ]
-      //             : []
-      //         );
-      //       }}
-      //     />
-      //     <Space>
-      //       <Button
-      //         type="primary"
-      //         onClick={confirm}
-      //         size="small"
-      //         style={{ width: 90 }}
-      //       >
-      //         Search
-      //       </Button>
-      //       <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
-      //         Reset
-      //       </Button>
-      //     </Space>
-      //   </Space>
-      // ),
-      // // FIXME：has bugs here
-      // // FIXME: onFilter 的value参数本来应该对应selectedKeys，是一个数组，但是实际上只有一个值，导致循环输入第一个和第二个数，出现致命错误
-      // onFilter: (value, record) => {
-      //   const startDate = moment(value[0]);
-      //   const endDate = moment(value[1]);
-      //   const recordDate = moment(record.createdAt);
-      //   // console.log("value:" + value);
-      //   // console.log("recordDate:" + recordDate.format("YYYY-MM-DD"));
-      //   // console.log("startDate:" + startDate.format("YYYY-MM-DD"));
-      //   // console.log("endDate:" + endDate.format("YYYY-MM-DD"));
-      //   return recordDate.isBetween(startDate, endDate, "days", "[]");
-      // // },
-      // render: (text) => moment(text).format("YYYY-MM-DD"),
     },
     {
       title: "书籍汇总",
@@ -243,16 +189,16 @@ const OrderTable: React.FC = () => {
       rowKey={(row) => row.id} // Fix: Return a string value for rowKey
       columns={columns}
       expandable={{
-        expandedRowRender: (record) => {
-          return record.items.map((order) => {
-            console.log(order);
+        expandedRowRender: (record: UserOrderWithRenderItems) => {
+          console.log(record.createdAt);
+          return record.items.map((orderItem) => {
             return (
-              order !== undefined && (
+              orderItem && (
                 <OrderCard
-                  book={order.book}
-                  key={order.id}
-                  number={order.number}
-                  id={order.id}
+                  book={orderItem.book}
+                  key={orderItem.id}
+                  number={orderItem.number}
+                  id={orderItem.id}
                 ></OrderCard>
               )
             );

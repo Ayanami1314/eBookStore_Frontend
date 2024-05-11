@@ -4,6 +4,7 @@ import { create } from "zustand";
 interface BuyItem {
   id: number;
   number: number;
+  buy: boolean;
 }
 interface selectedItems {
   BuyItems: BuyItem[];
@@ -19,3 +20,4 @@ const useCartStore = create<selectedItems>((set) => ({
 }));
 
 export default useCartStore;
+export type { BuyItem };
