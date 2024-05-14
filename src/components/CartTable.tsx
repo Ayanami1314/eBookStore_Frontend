@@ -126,7 +126,7 @@ const CartTable: React.FC = () => {
               ? d.book.price * d.number
               : 0
           )
-          .reduce((total, item) => total + item, 0)
+          .reduce((total, item) => total + item, 0) / 100
       : 0;
   };
   const [total_price, setTotalPrice] = useState<number>(
@@ -157,7 +157,7 @@ const CartTable: React.FC = () => {
       title: "单价",
       dataIndex: "book",
       key: "book_price",
-      render: (text) => <a>{text.price}</a>,
+      render: (text) => <a>{text.price / 100}</a>,
     },
     {
       title: "总价",
@@ -165,7 +165,7 @@ const CartTable: React.FC = () => {
       // render第一个参数是当前单元格数据，第二个是本行数据
       render: (_, record, index) => {
         return record
-          ? record.book.price *
+          ? (record.book.price / 100) *
               (dataWithKey && dataWithKey[index].number
                 ? dataWithKey[index].number
                 : 0)

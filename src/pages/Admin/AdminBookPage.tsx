@@ -11,9 +11,10 @@ const AdminBookPage = () => {
     pageIndex: 0,
     pageSize: 100,
   });
+  const setSearchBook = useBookQuery((s) => s.setSearchText);
   return (
     <Flex vertical gap="large">
-      <SearchBar />
+      <SearchBar setSearchText={setSearchBook} placeholder="输入书名搜索" />
       <AddBookForm />
       {isLoading && <Spin />}
       {data && <AdminBookTable books={data} />}

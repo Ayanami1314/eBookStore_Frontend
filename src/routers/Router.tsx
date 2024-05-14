@@ -45,8 +45,8 @@ const Router = createBrowserRouter([
                 path: "analysis",
                 children: [
                   { index: true, element: <AdminUserAnalysisPage /> },
-                  { path: "book", element: <AdminBookAnalysisPage /> },
-                  { path: "user", element: <AdminUserAnalysisPage /> },
+                  { path: "books", element: <AdminBookAnalysisPage /> },
+                  { path: "users", element: <AdminUserAnalysisPage /> },
                 ],
               },
               {

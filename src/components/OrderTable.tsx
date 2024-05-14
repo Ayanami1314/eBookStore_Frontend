@@ -1,6 +1,6 @@
 import type { TableProps } from "antd";
 
-import { useOrder, UserOrder } from "../hooks/useOrder";
+import { UserOrder } from "../hooks/useOrder";
 import OrderCard from "./OrderCard";
 import React, { useEffect, useRef, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
@@ -16,9 +16,16 @@ type UserOrderWithRenderItems = UserOrder & {
   formatTime: string;
 };
 type DataIndex = keyof UserOrderWithRenderItems;
-const OrderTable: React.FC = () => {
-  // TODO：使用DatePicker完成基于日期范围的筛选
-  // HINT： 过滤和排序功能是基于数据源（dataSource）的
+interface OrderTableProps {
+  orders: UserOrder[] | undefined;
+  isError?: boolean;
+  isLoading?: boolean;
+}
+const OrderTable: React.FC<OrderTableProps> = ({
+  orders: data,
+  isError,
+  isLoading,
+}: OrderTableProps) => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
@@ -140,7 +147,7 @@ const OrderTable: React.FC = () => {
       formatTime: new Date(order.createdAt).toLocaleString(),
     }));
   };
-  const { data, isError, isLoading } = useOrder();
+
   const [newdata, setNewData] = useState<
     UserOrderWithRenderItems[] | undefined
   >(toNewData(data));

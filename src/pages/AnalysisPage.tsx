@@ -6,8 +6,10 @@ import { useOrder } from "../hooks/useOrder";
 import getAnalysisInfo from "../components/AnalysisInfo";
 import useAnalysisStore from "../stores/useAnalysisStore";
 import dayjs, { Dayjs } from "dayjs";
+import useOrderQuery from "../stores/useOrderQuery";
 const AnalysisPage = () => {
-  const { data, isError, isLoading } = useOrder();
+  const query = useOrderQuery((s) => s.query);
+  const { data, isError, isLoading } = useOrder(query);
   const { startDate, endDate } = useAnalysisStore();
   const filter = (createdAt: Dayjs) =>
     (!startDate || startDate.isBefore(dayjs(createdAt))) &&

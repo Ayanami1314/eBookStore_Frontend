@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
 import { Book } from "./useBook";
 import { CommonResponse } from "../services/type";
+import { TimeRangeSearchQuery } from "./useAnalysis";
 
 export type OrderItem = {
   // ~~TODO~~: 考虑到书籍价格会变，应该由后端提供（当时的）总价，而不是前端计算
@@ -24,15 +25,19 @@ type OrderPost = {
   tel: string;
   itemIds: number[];
 };
-const fetchOrder = () => {
+export interface OrderQuery extends TimeRangeSearchQuery {
+  all?: boolean;
+}
+const fetchOrder = (query: OrderQuery) => {
+  // HINT: 后端自动根据用户权限返回对应的订单
   const orderClient = new apiClient<UserOrder>("/order");
-  return orderClient.getAll();
+  return orderClient.getAll(query);
 };
 
-const useOrder = () => {
+const useOrder = (query: OrderQuery) => {
   const { data, isError, isLoading } = useQuery<UserOrder[], Error>({
     queryKey: ["order"],
-    queryFn: fetchOrder,
+    queryFn: () => fetchOrder(query),
   });
   return { data, isError, isLoading };
 };

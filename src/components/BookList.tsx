@@ -20,20 +20,18 @@ const BookList = () => {
     books = data;
   }
   return (
-    <>
-      <Row gutter={16}>
-        {books.map((book) => (
-          <Col xs={24} sm={12} md={8} lg={6} xl={4} key={book.id}>
-            <BookCard
-              book={book}
-              isError={isError}
-              isLoading={isLoading}
-              key={book.id}
-            />
-          </Col>
-        ))}
-      </Row>
-    </>
+    <Row gutter={16}>
+      {books.map((book) => (
+        <Col xs={24} sm={12} md={8} lg={6} xl={4} key={book.id}>
+          <BookCard
+            book={book}
+            isError={isError}
+            isLoading={isLoading}
+            key={book.id}
+          />
+        </Col>
+      ))}
+    </Row>
   );
 };
 

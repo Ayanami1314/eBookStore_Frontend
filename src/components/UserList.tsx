@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { UserToAdmin } from "../hooks/useUsers";
-import { Button, Flex, Table, type TableProps } from "antd";
+import { Button, Flex, Table, Tag, type TableProps } from "antd";
 import mockUsers from "../mock/admin/mockUsers";
 type UserWithKey = UserToAdmin & { key: number };
 const UserList = () => {
@@ -59,7 +59,12 @@ const UserList = () => {
       title: "状态",
       dataIndex: "ban",
       key: "ban",
-      render: (ban: boolean) => (ban ? "已禁用" : "正常"),
+      render: (ban: boolean) =>
+        ban ? (
+          <Tag color="red">{"已禁用"}</Tag>
+        ) : (
+          <Tag color="green">{"正常"}</Tag>
+        ),
     },
     {
       title: "操作",

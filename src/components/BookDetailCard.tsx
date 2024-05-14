@@ -29,7 +29,9 @@ const BookDetailCard = ({ book, addToCart }: DetailProps) => {
           <Divider orientation="left">
             <Typography.Title level={3}>{"基本信息"}</Typography.Title>
           </Divider>
-          <Typography.Paragraph>{`作者：${book.author}    |    价格：${book.price}    |    销量：${book.sales}`}</Typography.Paragraph>
+          <Typography.Paragraph>{`作者：${book.author}    |    价格：${
+            book.price / 100
+          }    |    销量：${book.sales}`}</Typography.Paragraph>
           {/* {book.ISBN && (
         <Typography.Paragraph>{"ISBN：" + book.ISBN}</Typography.Paragraph>
       )} */}

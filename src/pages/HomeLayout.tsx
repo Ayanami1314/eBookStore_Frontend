@@ -20,7 +20,8 @@ const adminNavItems: NavItem[] = [
   { description: "用户管理", link: "/home/admin/user" },
   { description: "书籍管理", link: "/home/admin/book" },
   { description: "订单管理", link: "/home/admin/order" },
-  { description: "销售统计", link: "/home/admin/analysis" },
+  { description: "书籍统计", link: "/home/admin/analysis/books" },
+  { description: "用户统计", link: "/home/admin/analysis/users" },
 ];
 const loginItem: NavItem = { description: "登录", link: "/login" };
 
