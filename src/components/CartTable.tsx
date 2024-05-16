@@ -126,7 +126,7 @@ const CartTable: React.FC = () => {
               ? d.book.price * d.number
               : 0
           )
-          .reduce((total, item) => total + item, 0) / 100
+          .reduce((total, item) => total + item, 0)
       : 0;
   };
   const [total_price, setTotalPrice] = useState<number>(
@@ -210,7 +210,7 @@ const CartTable: React.FC = () => {
         <p>
           总价：
           {typeof total_price === "number" && !isNaN(total_price)
-            ? total_price.toFixed(2)
+            ? total_price / 100
             : 0}
           元{" "}
         </p>

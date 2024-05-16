@@ -1,27 +1,35 @@
-import { Button, Flex, Table, TableProps } from "antd";
-import { Book } from "../hooks/useBook";
+import { Button, Flex, Table, TableProps, message } from "antd";
+import { Book, useDeleteSingleBook } from "../hooks/useBook";
+import { useEffect } from "react";
 interface BookTableProps {
   books: Book[];
 }
 type BookWithKey = Book & { key: number };
-// id: number;
-// title: string;
-// description: string;
-// author: string;
-// price: number;
-// cover: string; // 图像资源的url
-// sales: number;
-// isbn?: string;
 const AdminBookTable = ({ books }: BookTableProps) => {
+  const [messageApi, contextHolder] = message.useMessage();
   const LongText = (text: string | undefined) =>
     text && text.length > 10 ? text.substring(0, 10) + "..." : text;
   const BookWithKey = books.map((b, index) => ({ ...b, key: index }));
   // TODO: replace them with the real backend
+  const {
+    deleteFn,
+    isError: deleteIsError,
+    responseData: deleteResponseData,
+  } = useDeleteSingleBook();
   const handleChange = (id: number) => {
     console.log("Try to modify Book " + id);
   };
+  useEffect(() => {
+    if (deleteResponseData?.ok) {
+      messageApi.open({ type: "success", content: "删除成功!" });
+    }
+    if (deleteResponseData?.ok === false) {
+      messageApi.open({ type: "success", content: "删除失败!" });
+    }
+  }, [deleteResponseData, deleteIsError, messageApi, deleteFn]);
   const handleDel = (id: number) => {
     console.log("Try to delete Book " + id);
+    deleteFn(id);
   };
   const columns: TableProps<BookWithKey>["columns"] = [
     {
@@ -84,6 +92,7 @@ const AdminBookTable = ({ books }: BookTableProps) => {
   ];
   return (
     <>
+      {contextHolder}
       <Table columns={columns} dataSource={BookWithKey}></Table>
     </>
   );

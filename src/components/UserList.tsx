@@ -1,22 +1,31 @@
 import { useEffect, useState } from "react";
-import { UserToAdmin } from "../hooks/useUsers";
+import { UserToAdmin, changeBan, useAllUsers } from "../hooks/useUsers";
 import { Button, Flex, Table, Tag, type TableProps } from "antd";
-import mockUsers from "../mock/admin/mockUsers";
+// import mockUsers from "../mock/admin/mockUsers";
 type UserWithKey = UserToAdmin & { key: number };
 const UserList = () => {
-  // TODO: use real data
-  // const { data: AllUsers, isLoading } = useUsers();
-  const isLoading = false;
+  const { data: AllUsers, isLoading } = useAllUsers();
+  // const isLoading = false;
 
   const [AllUsersWithKey, setUsers] = useState<UserWithKey[] | undefined>([]);
   useEffect(() => {
     setUsers(
-      mockUsers?.map((item: UserToAdmin, index: number) => ({
-        ...item,
-        key: index,
-      }))
+      // mockUsers?.map((item: UserToAdmin, index: number) => ({
+      //   ...item,
+      //   key: index,
+      // }))
+      AllUsers?.map(
+        (item, index: number) =>
+          ({
+            id: item.id,
+            nickname: item.nickname,
+            balance: item.balance,
+            key: index,
+            ban: item.status === "ban",
+          } as UserToAdmin & { key: number })
+      )
     );
-  }, []);
+  }, [AllUsers]);
   const handleBan = (id: number) => {
     // TODO: switch read backend ban user
     console.log("Try to ban:" + id);
@@ -25,6 +34,8 @@ const UserList = () => {
         item.id === id ? { ...item, ban: true } : item
       )
     );
+    // NOTE:乐观更新
+    changeBan(id, true);
   };
   const handleUnBan = (id: number) => {
     console.log("Try to unban:" + id);
@@ -33,6 +44,7 @@ const UserList = () => {
         item.id === id ? { ...item, ban: false } : item
       )
     );
+    changeBan(id, false);
   };
   const columns: TableProps<UserWithKey>["columns"] = [
     {

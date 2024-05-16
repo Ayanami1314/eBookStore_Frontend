@@ -11,16 +11,26 @@ import {
   Tag,
   type TableProps,
 } from "antd";
-import mockUsers from "../../mock/admin/mockUsers";
+// import mockUsers from "../../mock/admin/mockUsers";
 // import { AiFillAccountBook } from "react-icons/ai";
 import AnalysisDateFilter from "../../components/AnalysisDateFilter";
 import Title from "antd/es/typography/Title";
 import SearchBar from "../../components/SearchBar";
+import { useUserAnalysis } from "../../hooks/useAnalysis";
+import useAnalysisStore from "../../stores/useAnalysisStore";
+import { dayToString } from "../../utils/date";
 type UserWithKey = UserToAdmin & { key: number };
 const AdminUserAnalysisPage = () => {
   // TODO: use real data
-  // const { data: AllUsers, isLoading } = useUsers();
-  const isLoading = false;
+  const { startDate, endDate } = useAnalysisStore();
+  const [keyword, setUserKeyWord] = useState<string>("");
+  const TimeQuery = {
+    start: dayToString(startDate),
+    end: dayToString(endDate),
+    keyword: keyword,
+  };
+  const { data: AllUsers, isLoading } = useUserAnalysis(TimeQuery);
+  // const isLoading = false;
   const getRankIcon = (rank: number) => {
     // return <Title level={4}>{rank}</Title>;
     return <Tag color="blue">{rank}</Tag>;
@@ -28,12 +38,23 @@ const AdminUserAnalysisPage = () => {
   const [AllUsersWithKey, setUsers] = useState<UserWithKey[] | undefined>([]);
   useEffect(() => {
     setUsers(
-      mockUsers?.map((item: UserToAdmin, index: number) => ({
-        ...item,
-        key: index,
-      }))
+      // mockUsers?.map((item: UserToAdmin, index: number) => ({
+      //   ...item,
+      //   key: index,
+      // }))
+      AllUsers?.map(
+        (item, index: number) =>
+          ({
+            id: item.user.id,
+            nickname: item.user.nickname,
+            balance: item.user.balance,
+            key: index,
+            ban: item.user.status === "ban",
+            totalcost: item.totalcost,
+          } as UserToAdmin & { key: number })
+      )
     );
-  }, []);
+  }, [AllUsers]);
   const columns: TableProps<UserWithKey>["columns"] = [
     {
       title: "排名",
@@ -86,7 +107,7 @@ const AdminUserAnalysisPage = () => {
       ),
     },
   ];
-  const [, setUserKeyWord] = useState<string>("");
+
   return (
     <>
       {isLoading && <Skeleton />}

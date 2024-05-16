@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
 import { Book } from "./useBook";
+import { OrderQuery, UserOrder } from "./useOrder";
+import { User } from "./useUsers";
 export interface BookAnalysis {
   book: Book;
   total_price: number;
@@ -13,11 +15,8 @@ export interface TimeRangeSearchQuery {
   keyword: string;
 }
 export interface UserAnalysis {
-  id: number;
-  nickname: string;
-  balance: number;
-  ban: boolean;
-  headImg?: string;
+  user: User;
+  totalcost: number;
 }
 const fetchBookAnalysis = (query: TimeRangeSearchQuery) => {
   const apiClientInstance = new apiClient<BookAnalysis>(
@@ -46,4 +45,16 @@ const useUserAnalysis = (query: TimeRangeSearchQuery) => {
   });
   return { data, isLoading, isError };
 };
-export { useBookAnalysis, useUserAnalysis };
+
+const fetchOrders = (query: OrderQuery) => {
+  const apiClientInstance = new apiClient<UserOrder>("/admin/orders");
+  return apiClientInstance.getAll(query);
+};
+const useOrderAnalysis = (query: OrderQuery) => {
+  const { data, isLoading, isError } = useQuery<UserOrder[], Error>({
+    queryKey: ["orderAnalysis", query],
+    queryFn: () => fetchOrders(query),
+  });
+  return { data, isLoading, isError };
+};
+export { useBookAnalysis, useUserAnalysis, useOrderAnalysis };

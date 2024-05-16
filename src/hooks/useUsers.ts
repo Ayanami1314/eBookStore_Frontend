@@ -1,11 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
 import { CommonResponse } from "../services/type";
-import mockUsers from "../mock/admin/mockUsers";
+// import mockUsers from "../mock/admin/mockUsers";
+
 interface User {
   id: number;
   nickname: string;
   balance: number;
+  status?: "normal" | "ban";
+  headImg?: string;
+  city?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  firstName?: string;
+  lastName?: string;
 }
 type UserToAdmin = User & { totalcost: number; ban?: boolean };
 // TODO: implement below two with admin api
@@ -21,21 +30,25 @@ const fetchMe = () => {
   const apiClientInstance = new apiClient<User>(`/user/me`);
   return apiClientInstance.get();
 };
-const changeBan = (id: number) => {
+const changeBan = (id: number, ban: boolean) => {
   const apiClientInstance = new apiClient<CommonResponse>(
     `/admin/user/changeban/${id}`
   );
-  return apiClientInstance.put({});
+  return apiClientInstance.put({ params: { ban: ban } });
 };
-const useUsers = () => {
-  // const { data, isError, isLoading } = useQuery<User[], Error>({
-  //   queryKey: ["users"],
-  //   queryFn: fetchUsers,
-  // });
-  // return { data, isError, isLoading };
+const fetchUsers = () => {
+  const apiClientInstance = new apiClient<UserToAdmin>("/admin/users");
+  return apiClientInstance.getAll();
+};
+const useAllUsers = () => {
+  const { data, isError, isLoading } = useQuery<User[], Error>({
+    queryKey: ["users"],
+    queryFn: fetchUsers,
+  });
+  return { data, isError, isLoading };
   // HINT: fake users data now
-  const data = mockUsers as UserToAdmin[];
-  return { data: data, isError: false, isLoading: false };
+  // const data = mockUsers as UserToAdmin[];
+  // return { data: data, isError: false, isLoading: false };
 };
 const useSingleUser = (id: number) => {
   const { data, isError, isLoading } = useQuery<User, Error>({
@@ -55,5 +68,5 @@ const changePassword = (password: string) => {
   const apiClientInstance = new apiClient<CommonResponse>(`/user/me/password`);
   return apiClientInstance.put({ data: { password: password } });
 };
-export { useUsers, useSingleUser, useMe, changeBan, changePassword };
+export { useAllUsers, useSingleUser, useMe, changeBan, changePassword };
 export type { User, UserToAdmin };

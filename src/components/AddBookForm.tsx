@@ -1,4 +1,6 @@
 import { Button, Form, Input, message } from "antd";
+import { useAddSingleBook } from "../hooks/useBook";
+import { useEffect } from "react";
 interface FormItems {
   title: string;
   description: string;
@@ -19,13 +21,19 @@ const AddBookForm = () => {
     { key: "cover", label: "封面", required: true },
     { key: "isbn", label: "ISBN", required: false },
   ];
+  const { addFn, isSuccess, isError, responseData } = useAddSingleBook();
+  useEffect(() => {
+    if (isSuccess) {
+      messageApi.open({ type: "success", content: "添加成功!" });
+    }
+    if (isError) {
+      messageApi.open({ type: "error", content: "添加失败!" });
+    }
+  }, [isSuccess, isError, responseData, messageApi]);
   const handleSubmit = (values: FormItems) => {
     console.log(values);
     // TODO: replace it with real backend
-    messageApi.open({
-      type: "success",
-      content: "提交成功！",
-    });
+    addFn(values);
   };
   return (
     <>

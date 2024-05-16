@@ -3,6 +3,7 @@ import { Button, Form, Input, Modal, message } from "antd";
 import useCartStore, { BuyItem } from "../stores/useCartStore";
 import { useOrderPost } from "../hooks/useOrder";
 import { CommonResponse } from "../services/type";
+import { useNavigate } from "react-router-dom";
 interface FormItems {
   receiver: string;
   address: string;
@@ -17,10 +18,15 @@ const SettleButton: React.FC = () => {
     setIsModalOpen(true);
   };
   const [backupItems, setBackupItems] = useState<BuyItem[]>(BuyItems);
-
+  const navigate = useNavigate();
   const postOnSuccess = (data: CommonResponse) => {
     console.log(data);
-    messageApi.open({ type: "success", content: "订单提交成功!" });
+    messageApi.open({ type: "success", content: "订单提交成功!请稍等......" });
+
+    // TODO: 发现一个问题，这样跳转HomeLayout的菜单UI没有正常更新, 需要再研究antd的menu组件
+    setTimeout(() => {
+      navigate("/home/order");
+    }, 2000);
   };
 
   const { postFn, isSuccess, responseData } = useOrderPost();
