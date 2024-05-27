@@ -10,7 +10,6 @@ const AdminBookTable = ({ books }: BookTableProps) => {
   const LongText = (text: string | undefined) =>
     text && text.length > 10 ? text.substring(0, 10) + "..." : text;
   const BookWithKey = books.map((b, index) => ({ ...b, key: index }));
-  // TODO: replace them with the real backend
   const {
     deleteFn,
     isError: deleteIsError,

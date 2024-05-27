@@ -27,7 +27,6 @@ const UserList = () => {
     );
   }, [AllUsers]);
   const handleBan = (id: number) => {
-    // TODO: switch read backend ban user
     console.log("Try to ban:" + id);
     setUsers(
       AllUsersWithKey?.map((item) =>

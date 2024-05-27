@@ -32,7 +32,6 @@ const AddBookForm = () => {
   }, [isSuccess, isError, responseData, messageApi]);
   const handleSubmit = (values: FormItems) => {
     console.log(values);
-    // TODO: replace it with real backend
     addFn(values);
   };
   return (

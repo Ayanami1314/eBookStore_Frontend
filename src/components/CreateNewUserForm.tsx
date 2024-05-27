@@ -8,12 +8,14 @@ interface FormValues {
 }
 const CreateNewUserForm = () => {
   // TODO: add validation
+  // TODO: real email validation
+
   const onFinish = (values: FormValues) => {
     if (values.password !== values.repeatPassword) {
       setRepeatSuccess(false);
       return;
     }
-    // TODO: send to backend
+    // TODO: send to backend(完成创建新的用户)
     setRepeatSuccess(true);
     console.log("Success:", values);
   };

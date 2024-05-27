@@ -22,8 +22,6 @@ const SettleButton: React.FC = () => {
   const postOnSuccess = (data: CommonResponse) => {
     console.log(data);
     messageApi.open({ type: "success", content: "订单提交成功!请稍等......" });
-
-    // TODO: 发现一个问题，这样跳转HomeLayout的菜单UI没有正常更新, 需要再研究antd的menu组件
     setTimeout(() => {
       navigate("/home/order");
     }, 2000);

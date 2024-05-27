@@ -72,7 +72,7 @@ const Router = createBrowserRouter([
     children: [
       { index: true, element: <LoginPage /> },
       { path: "create", element: <CreateNewUserPage /> },
-      { path: "password", element: <ResetPasswordPage /> },
+      { path: "resetpassword", element: <ResetPasswordPage /> },
     ],
   },
 ]);

@@ -4,6 +4,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import UserIcon from "../components/UserIcon";
 import useAuthStore from "../auth/useAuthStore";
 import { useMe } from "../hooks/useUsers";
+import { useEffect, useState } from "react";
 
 const { Header, Content, Footer } = Layout;
 interface NavItem {
@@ -47,6 +48,20 @@ const HomeLayout = () => {
   ));
   // 48px: 和content对齐
   const { isAdmin, isUser } = useAuthStore((s) => s.authinfo);
+  const path = useLocation().pathname;
+  const [selectKey, setSelectKey] = useState<number>(0);
+  useEffect(() => {
+    setTimeout(() => {
+      const links = [
+        ...navItems.map((item) => item.link),
+        ...adminNavItems.map((item) => item.link),
+      ];
+      const index = links.findIndex((item) => item === path);
+      if (index !== -1) {
+        setSelectKey(index);
+      }
+    }, 100); // HINT: an ugly impl, sleep 100 to wait for setSelectKey, but it works
+  }, [path]);
   const loginMenuItem = (
     <MenuItem
       key={menuItems.length + 1}
@@ -92,6 +107,10 @@ const HomeLayout = () => {
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={["0"]}
+          selectedKeys={[selectKey.toString()]}
+          onSelect={({ key }) => {
+            setSelectKey(Number(key));
+          }}
           style={{
             flex: 1,
             minWidth: 0,

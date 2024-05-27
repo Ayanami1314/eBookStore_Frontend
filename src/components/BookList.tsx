@@ -8,7 +8,7 @@ const BookList = () => {
   // gutter: 边距
   // span: n/24 * 父容器最大宽度，类似fr
   let books = fakeBooks;
-  // TODO: 实现分页
+  // TODO: 要做无限滚动吗？
   const searchText = useBookQuery((s) => s.searchText);
   const { data, isLoading, isError } = useBooks({
     keyword: searchText,

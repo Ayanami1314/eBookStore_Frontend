@@ -17,12 +17,11 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (values: FormItems) => {
-    login(values.username, values.password).then(({ ok, message }) => {
-      // TODO: 现在这里是直接给admin权限
+    login(values.username, values.password).then(({ ok, message, data }) => {
       setAuth({
         ...authinfo,
         isUser: ok,
-        isAdmin: ok,
+        isAdmin: data?.role === "admin" ? ok : false,
         password: values.password,
       });
       setMessage(message);
@@ -81,8 +80,7 @@ const LoginForm = () => {
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox>{"记住我"}</Checkbox>
             </Form.Item>
-            {/*TODO: add forgot password */}
-            <a className="login-form-forgot" href="">
+            <a className="login-form-forgot" href="./resetpassword">
               {"忘记密码？"}
             </a>
 

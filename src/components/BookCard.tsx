@@ -1,6 +1,7 @@
 import { Book } from "../hooks/useBook";
 import { Card } from "antd";
 import { Link } from "react-router-dom";
+
 const { Meta } = Card;
 interface BookCardProps {
   book: Book;
@@ -15,6 +16,10 @@ const limitLengthText = (description: string) => {
   return description;
 };
 const BookCard = ({ book, isLoading, isError }: BookCardProps) => {
+  const handleError = (e: any) => {
+    e.target.src =
+      "https://img.tukuppt.com/png_preview/00/04/81/SYZxWQlAr9.jpg!/fw/780";
+  };
   return (
     <>
       <Link to={`/home/book/${book.id}`}>
@@ -23,7 +28,11 @@ const BookCard = ({ book, isLoading, isError }: BookCardProps) => {
           bordered={false}
           key={book.id}
           loading={isLoading && !isError}
-          cover={book.cover ? <img alt="example" src={book.cover} /> : null}
+          cover={
+            book.cover ? (
+              <img alt="example" src={book.cover} onError={handleError} />
+            ) : null
+          }
           style={{ marginBottom: 16 }}
         >
           <Meta
