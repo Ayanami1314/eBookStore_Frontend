@@ -64,9 +64,12 @@ const useMe = () => {
   });
   return { data, isError, isLoading };
 };
-const changePassword = (password: string) => {
+const changePassword = (oldPassword: string, newPassword: string) => {
+  console.log(`changepassword ${oldPassword}, ${newPassword}`);
   const apiClientInstance = new apiClient<CommonResponse>(`/user/me/password`);
-  return apiClientInstance.put({ data: { password: password } });
+  return apiClientInstance.put({
+    data: { oldPassword: oldPassword, newPassword: newPassword },
+  });
 };
 export { useAllUsers, useSingleUser, useMe, changeBan, changePassword };
 export type { User, UserToAdmin };

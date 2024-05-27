@@ -8,6 +8,7 @@ import { useMe } from "../hooks/useUsers";
 import { FaUserCircle } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+import ResetPassword from "./ResetPasswordForm";
 const UserIcon = () => {
   const { data, isError } = useMe();
   const { nickname, balance } = data || {};
@@ -25,7 +26,7 @@ const UserIcon = () => {
     {
       key: "3",
       icon: <FaKey></FaKey>,
-      label: <Link to="/login/password">修改密码</Link>,
+      label: <ResetPassword />,
     },
     {
       key: "4",
