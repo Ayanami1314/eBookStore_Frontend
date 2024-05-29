@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { message, Upload } from "antd";
 import type { GetProp, UploadProps } from "antd";
+import { PREFIX } from "../common/common";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -55,7 +56,7 @@ const UserUploadImage: React.FC = () => {
       listType="picture-card"
       className="avatar-uploader"
       showUploadList={false}
-      action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+      action={`${PREFIX}/user/me/avatar`}
       beforeUpload={beforeUpload}
       onChange={handleChange}
     >

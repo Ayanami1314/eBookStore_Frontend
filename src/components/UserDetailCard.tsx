@@ -2,16 +2,10 @@ import { ProForm, ProFormItem, ProFormText } from "@ant-design/pro-components";
 import { Col, Flex, Row, Space, message } from "antd";
 import UserUploadImage from "./UserUploadImage";
 import TextArea from "antd/es/input/TextArea";
+import { changeUserInfo, changeUserInfoProps, useMe } from "../hooks/useUsers";
 
 const UserDetailCard = () => {
-  const waitTime = (time: number = 100) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true);
-      }, time);
-    });
-  };
-
+  const { data: personInfo } = useMe();
   return (
     <ProForm<{
       name: string;
@@ -33,25 +27,40 @@ const UserDetailCard = () => {
           );
         },
       }}
-      onFinish={async (values) => {
-        await waitTime(2000);
+      onFinish={async (values: changeUserInfoProps) => {
         console.log(values);
-        message.success("提交成功");
+        changeUserInfo(values).then((res) => {
+          console.log(res);
+          if (res.ok) {
+            message.success("提交成功");
+          } else {
+            message.error(res.message);
+          }
+        });
       }}
       params={{}}
       request={async () => {
-        await waitTime(100);
-        return {
-          name: "",
-          useMode: "chapter",
-        };
+        // NOTE: 表单初始化调用, 得到初始值
+        return personInfo
+          ? {
+              name: personInfo.nickname,
+              email: personInfo.email,
+              avatar: personInfo.headImg,
+              notes: personInfo.notes,
+            }
+          : {
+              name: "",
+              email: "",
+              avatar: "",
+              notes: "",
+            };
       }}
     >
       <ProFormText
         style={{ flex: 1 }}
         name="name"
         label="用户名称"
-        tooltip="最长为 24 位"
+        tooltip="最长为24字符，不含特殊字符"
         placeholder="请输入名称"
       />
       <ProFormText style={{ flex: 1 }} name="email" label="用户邮箱" />

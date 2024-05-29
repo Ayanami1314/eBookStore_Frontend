@@ -5,6 +5,7 @@ import { changePassword } from "../hooks/useUsers";
 import { CommonResponse } from "../services/type";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { passwordRules } from "../utils/validateRules";
 interface FormItems {
   password: string;
   newPassword: string;
@@ -63,34 +64,21 @@ const ResetPassword = () => {
         onCancel={handleCancel}
       >
         <Form form={form} onFinish={onFinish}>
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: "Please input your Password" }]}
-          >
+          <Form.Item name="password" rules={passwordRules}>
             <Input
               prefix={<LockOutlined className="site-form-item-icon" />}
               type="password"
               placeholder="旧密码"
             />
           </Form.Item>
-          <Form.Item
-            name="newPassword"
-            rules={[
-              { required: true, message: "Please input your new password" },
-            ]}
-          >
+          <Form.Item name="newPassword" rules={passwordRules}>
             <Input
               prefix={<LockOutlined className="site-form-item-icon" />}
               type="repeatPassword"
               placeholder="新密码"
             />
           </Form.Item>
-          <Form.Item
-            name="repeatPassword"
-            rules={[
-              { required: true, message: "Please repeat your new password" },
-            ]}
-          >
+          <Form.Item name="repeatPassword" rules={passwordRules}>
             <Input
               prefix={<LockOutlined className="site-form-item-icon" />}
               type="repeatPassword"

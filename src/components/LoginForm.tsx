@@ -27,7 +27,7 @@ const LoginForm = () => {
       setMessage(message);
       console.log("ok: " + ok);
       console.log("message: " + message);
-      if (ok) {
+      if (ok === true) {
         messageApi.open({
           type: "success",
           content: "登录成功！",
@@ -36,7 +36,7 @@ const LoginForm = () => {
       } else
         messageApi.open({
           type: "error",
-          content: "登录失败！",
+          content: `登录失败！${message}`,
         });
     });
     console.log(values);

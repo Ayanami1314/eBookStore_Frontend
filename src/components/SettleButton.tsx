@@ -4,6 +4,7 @@ import useCartStore, { BuyItem } from "../stores/useCartStore";
 import { useOrderPost } from "../hooks/useOrder";
 import { CommonResponse } from "../services/type";
 import { useNavigate } from "react-router-dom";
+import { phoneRules } from "../utils/validateRules";
 interface FormItems {
   receiver: string;
   address: string;
@@ -101,7 +102,10 @@ const SettleButton: React.FC = () => {
           </Form.Item>
           <Form.Item
             name="tel"
-            rules={[{ required: true, message: "请填写联系电话" }]}
+            rules={[
+              { required: true, message: "请填写联系电话" },
+              ...phoneRules,
+            ]}
           >
             <Input placeholder="联系电话" />
           </Form.Item>

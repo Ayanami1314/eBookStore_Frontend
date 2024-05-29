@@ -1,6 +1,6 @@
 import { Dropdown, Flex } from "antd";
 import type { MenuProps } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CiLogout, CiUser } from "react-icons/ci";
 import { MdAccountBalanceWallet } from "react-icons/md";
 import { FaKey } from "react-icons/fa6";
@@ -9,9 +9,11 @@ import { FaUserCircle } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import ResetPassword from "./ResetPasswordForm";
+import logout from "../services/logout";
 const UserIcon = () => {
   const { data, isError } = useMe();
   const { nickname, balance } = data || {};
+  const navigate = useNavigate();
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -37,7 +39,17 @@ const UserIcon = () => {
       key: "5",
       icon: <CiLogout></CiLogout>,
       danger: true,
-      label: "登出",
+      label: (
+        <p
+          onClick={() => {
+            logout().then(() => {
+              navigate("/login");
+            });
+          }}
+        >
+          登出
+        </p>
+      ),
     },
   ];
   // TODO: replace this with backend image

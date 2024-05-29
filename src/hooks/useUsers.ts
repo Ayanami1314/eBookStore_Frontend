@@ -15,6 +15,7 @@ interface User {
   address?: string;
   firstName?: string;
   lastName?: string;
+  notes?: string;
 }
 type UserToAdmin = User & { totalcost: number; ban?: boolean };
 // TODO: implement below two with admin api
@@ -71,5 +72,33 @@ const changePassword = (oldPassword: string, newPassword: string) => {
     data: { oldPassword: oldPassword, newPassword: newPassword },
   });
 };
-export { useAllUsers, useSingleUser, useMe, changeBan, changePassword };
+export interface registerUserRequest {
+  username: string;
+  password: string;
+  email: string;
+}
+const registerNewUser = (req: registerUserRequest) => {
+  const apiClientInstance = new apiClient<CommonResponse>(`/register`);
+  return apiClientInstance.post({ data: req });
+};
+export interface changeUserInfoProps {
+  phone?: string;
+  email?: string;
+  address?: string;
+  avatar?: string;
+  notes?: string;
+}
+const changeUserInfo = (req: changeUserInfoProps) => {
+  const apiClientInstance = new apiClient<CommonResponse>(`/user/me/info`);
+  return apiClientInstance.put({ data: req });
+};
+export {
+  useAllUsers,
+  useSingleUser,
+  useMe,
+  changeBan,
+  changePassword,
+  registerNewUser,
+  changeUserInfo,
+};
 export type { User, UserToAdmin };

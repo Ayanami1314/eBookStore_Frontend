@@ -1,6 +1,7 @@
 import { Button, Form, Input, message } from "antd";
 import { useAddSingleBook } from "../hooks/useBook";
 import { useEffect } from "react";
+import { ISBNRules } from "../utils/validateRules";
 interface FormItems {
   title: string;
   description: string;
@@ -17,9 +18,10 @@ const AddBookForm = () => {
     { key: "title", label: "标题", required: true },
     { key: "description", label: "简介", required: true },
     { key: "author", label: "作者", required: true },
-    { key: "price", label: "标价", required: true },
+    { key: "price", label: "标价(分)", required: true },
+    //TODO 上传图片
     { key: "cover", label: "封面", required: true },
-    { key: "isbn", label: "ISBN", required: false },
+    { key: "isbn", label: "ISBN", required: true, rules: ISBNRules },
   ];
   const { addFn, isSuccess, isError, responseData } = useAddSingleBook();
   useEffect(() => {
@@ -46,7 +48,10 @@ const AddBookForm = () => {
           <Form.Item
             name={c.key}
             label={c.label}
-            rules={[{ required: c.required, message: `请输入${c.label}!` }]}
+            rules={[
+              { required: c.required, message: `请输入${c.label}!` },
+              ...(c.rules ? c.rules : []),
+            ]}
           >
             <Input></Input>
           </Form.Item>
