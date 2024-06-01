@@ -72,11 +72,6 @@ const AdminUserAnalysisPage = () => {
       key: "nickname",
     },
     {
-      title: "消费",
-      dataIndex: "totalcost",
-      key: "totalcost",
-    },
-    {
       title: "余额",
       dataIndex: "balance",
       key: "balance",
@@ -98,7 +93,7 @@ const AdminUserAnalysisPage = () => {
       dataIndex: "totalcost",
       render: (cost: number) => (
         <Statistic
-          title="总销售额"
+          title="总消费"
           value={cost / 100}
           precision={2}
           // prefix={<AiFillAccountBook />}

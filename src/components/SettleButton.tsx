@@ -26,6 +26,8 @@ const SettleButton: React.FC = () => {
     setTimeout(() => {
       navigate("/home/order");
     }, 2000);
+    // 清空购物车
+    setItems([]);
   };
 
   const { postFn, isSuccess, responseData } = useOrderPost();

@@ -56,11 +56,11 @@ const UserList = () => {
       dataIndex: "nickname",
       key: "nickname",
     },
-    {
-      title: "消费",
-      dataIndex: "totalcost",
-      key: "totalcost",
-    },
+    // {
+    //   title: "消费",
+    //   dataIndex: "totalcost",
+    //   key: "totalcost",
+    // },
     {
       title: "余额",
       dataIndex: "balance",
