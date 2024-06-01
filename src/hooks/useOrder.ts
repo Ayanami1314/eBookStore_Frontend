@@ -35,8 +35,9 @@ const fetchOrder = (query: OrderQuery) => {
 };
 
 const useOrder = (query: OrderQuery) => {
+  console.log("query: " + query.keyword);
   const { data, isError, isLoading } = useQuery<UserOrder[], Error>({
-    queryKey: ["order"],
+    queryKey: ["order", query],
     queryFn: () => fetchOrder(query),
   });
   return { data, isError, isLoading };

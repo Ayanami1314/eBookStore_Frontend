@@ -1,6 +1,7 @@
 import { Button, Flex, Table, TableProps, message } from "antd";
 import { Book, useDeleteSingleBook } from "../hooks/useBook";
 import { useEffect } from "react";
+import MutateBookButton from "./MutateBookModel";
 interface BookTableProps {
   books: Book[];
 }
@@ -15,9 +16,6 @@ const AdminBookTable = ({ books }: BookTableProps) => {
     isError: deleteIsError,
     responseData: deleteResponseData,
   } = useDeleteSingleBook();
-  const handleChange = (id: number) => {
-    console.log("Try to modify Book " + id);
-  };
   useEffect(() => {
     if (deleteResponseData?.ok) {
       messageApi.open({ type: "success", content: "删除成功!" });
@@ -77,16 +75,18 @@ const AdminBookTable = ({ books }: BookTableProps) => {
     {
       title: "操作",
       key: "action",
-      render: (_, record) => (
-        <Flex gap="small">
-          <Button type="primary" onClick={() => handleChange(record.id)}>
-            修改书籍信息
-          </Button>
-          <Button type="primary" danger onClick={() => handleDel(record.id)}>
-            删除书籍
-          </Button>
-        </Flex>
-      ),
+      render: (_, record) => {
+        const { key, ...recordWithoutKey } = record;
+        console.log(key);
+        return (
+          <Flex gap="middle">
+            <MutateBookButton book={recordWithoutKey} />
+            <Button type="primary" danger onClick={() => handleDel(record.id)}>
+              删除书籍
+            </Button>
+          </Flex>
+        );
+      },
     },
   ];
   return (

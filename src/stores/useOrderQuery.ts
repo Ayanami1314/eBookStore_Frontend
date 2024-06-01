@@ -9,6 +9,6 @@ const useBookQuery = create<OrderQueryStore>((set) => ({
   query: { keyword: "", start: null, end: null },
   setQuery: (query: OrderQuery) => set({ query }),
   setSearchText: (text: string) =>
-    set((state) => ({ query: { ...state.query, searchText: text } })),
+    set((state) => ({ query: { ...state.query, keyword: text } })),
 }));
 export default useBookQuery;

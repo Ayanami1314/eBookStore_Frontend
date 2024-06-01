@@ -5,13 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { LoginFormPage } from "@ant-design/pro-components";
 import login from "../services/login";
+import { passwordRules, usernameRules } from "../utils/validateRules";
 interface FormItems {
   username: string;
   password: string;
 }
 const LoginForm = () => {
   const [messageApi, contextHolder] = message.useMessage();
-  // TODO: add validation
   const { authinfo, setAuth } = useAuthStore();
   const [, setMessage] = useState("");
   const navigate = useNavigate();
@@ -56,19 +56,13 @@ const LoginForm = () => {
         onFinish={handleSubmit}
         style={{ height: "100vh" }}
       >
-        <Form.Item
-          name="username"
-          rules={[{ required: true, message: "Please input your Username!" }]}
-        >
+        <Form.Item name="username" rules={usernameRules}>
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
             placeholder="Username"
           />
         </Form.Item>
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: "Please input your Password!" }]}
-        >
+        <Form.Item name="password" rules={passwordRules}>
           <Input
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"

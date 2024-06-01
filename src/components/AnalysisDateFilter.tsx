@@ -7,6 +7,7 @@ const AnalysisDateFilter = () => {
   return (
     <>
       <DatePicker.RangePicker
+        size="large"
         placeholder={["Any Time", "Till Now"]}
         allowEmpty={[true, true]}
         defaultValue={[startDate, endDate]}
