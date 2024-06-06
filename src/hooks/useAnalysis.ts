@@ -24,11 +24,24 @@ const fetchBookAnalysis = (query: TimeRangeSearchQuery) => {
   );
   return apiClientInstance.getAll(query);
 };
+const fetchMyBookAnalysis = (query: TimeRangeSearchQuery) => {
+  const apiClientInstance = new apiClient<BookAnalysis>(
+    `/user/me/analysis/books`
+  );
+  return apiClientInstance.getAll(query);
+};
 
 const useBookAnalysis = (query: TimeRangeSearchQuery) => {
   const { data, isLoading, isError } = useQuery<BookAnalysis[], Error>({
     queryKey: ["bookAnalysis", query],
     queryFn: () => fetchBookAnalysis(query),
+  });
+  return { data, isLoading, isError };
+};
+const useMyBookAnalysis = (query: TimeRangeSearchQuery) => {
+  const { data, isLoading, isError } = useQuery<BookAnalysis[], Error>({
+    queryKey: ["myBookAnalysis", query],
+    queryFn: () => fetchMyBookAnalysis(query),
   });
   return { data, isLoading, isError };
 };
@@ -57,4 +70,9 @@ const useOrderAnalysis = (query: OrderQuery) => {
   });
   return { data, isLoading, isError };
 };
-export { useBookAnalysis, useUserAnalysis, useOrderAnalysis };
+export {
+  useBookAnalysis,
+  useUserAnalysis,
+  useOrderAnalysis,
+  useMyBookAnalysis,
+};

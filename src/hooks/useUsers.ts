@@ -82,6 +82,7 @@ const registerNewUser = (req: registerUserRequest) => {
   return apiClientInstance.post({ data: req });
 };
 export interface changeUserInfoProps {
+  nickname?: string;
   phone?: string;
   email?: string;
   address?: string;

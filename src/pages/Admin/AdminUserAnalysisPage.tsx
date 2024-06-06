@@ -21,8 +21,8 @@ import useAnalysisStore from "../../stores/useAnalysisStore";
 import { dayToString } from "../../utils/date";
 type UserWithKey = UserToAdmin & { key: number };
 const AdminUserAnalysisPage = () => {
-  // TODO: use real data
   const { startDate, endDate } = useAnalysisStore();
+  // HINT: 由于store里面的keyword是book keyword, 要搜索user需要本地的keyword
   const [keyword, setUserKeyWord] = useState<string>("");
   const TimeQuery = {
     start: dayToString(startDate),

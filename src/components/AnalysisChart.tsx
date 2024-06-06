@@ -1,33 +1,32 @@
 import { Spin } from "antd";
 import { Column } from "@ant-design/plots";
-import { BookInfo } from "./AnalysisInfo";
-import useAnalysisStore from "../stores/useAnalysisStore";
-import { useEffect, useState } from "react";
+import { BookAnalysis } from "../hooks/useAnalysis";
 
 interface AnalysisChartProps {
-  AllBookInfo: BookInfo[];
+  analysis: BookAnalysis[];
   isError?: boolean;
   isLoading?: boolean;
 }
 const AnalysisChart = ({
-  AllBookInfo,
+  analysis: AllBookAnalysis,
   isError,
   isLoading,
 }: AnalysisChartProps) => {
   // console.log(data);
   // statistic by book
-  console.log(AllBookInfo);
   const PartHideText = (text: string) => {
     return text.length > 8 ? text.substring(0, 8) + "..." : text;
   };
-  const { startDate, endDate } = useAnalysisStore();
-  const [renderBookInfo, setRender] = useState<BookInfo[]>(AllBookInfo);
-  useEffect(() => {
-    console.log(startDate);
-    console.log(endDate);
-    setRender(AllBookInfo);
-  }, [AllBookInfo, endDate, startDate]);
-
+  type renderDataType = {
+    title: string;
+    number: number;
+    price: number;
+  };
+  const renderData: renderDataType[] = AllBookAnalysis.map((bi) => ({
+    title: PartHideText(bi.book.title),
+    number: bi.total_sales,
+    price: bi.total_price,
+  }));
   const config = {
     title: {
       title: "书籍热销榜",
@@ -36,14 +35,14 @@ const AnalysisChart = ({
       align: "center",
     },
     data: {
-      value: renderBookInfo,
+      value: renderData,
     },
     xField: "title",
     yField: "number",
     colorField: "title",
 
     label: {
-      text: (bi: BookInfo) => `${PartHideText(bi.title)}: ${bi.number}本`,
+      text: (bi: renderDataType) => `${PartHideText(bi.title)}: ${bi.number}本`,
       textBaseline: "bottom",
       fontSize: 14,
     },

@@ -30,7 +30,7 @@ const BookDetailPage = () => {
   if (!id) {
     throw new Error("路由缺少id参数");
   }
-  const { data: book, isLoading, isError } = useSingleBook(id);
+  const { data: book, isLoading, isError } = useSingleBook(Number(id));
   if (isLoading) {
     return <Skeleton></Skeleton>;
   }

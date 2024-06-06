@@ -60,7 +60,7 @@ const ISBNRules = [
     message: "请输入有效的ISBN码!",
   },
   {
-    pattern: /^[0-9]{10,13}$/,
+    pattern: /^(?:[0-9]-?){10,13}$/,
     message: "ISBN码格式不正确",
   },
 ];
