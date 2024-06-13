@@ -1,13 +1,14 @@
 import { Button, Form, Input, message } from "antd";
 import { useAddSingleBook } from "../hooks/useBook";
 import { useEffect } from "react";
-import { ISBNRules } from "../utils/validateRules";
+import { ISBNRules, quantityRules } from "../utils/validateRules";
 interface FormItems {
   title: string;
   description: string;
   author: string;
   price: number;
   cover: string; // 图像资源的url
+  storage: number;
   isbn?: string;
 }
 const AddBookForm = () => {
@@ -22,6 +23,7 @@ const AddBookForm = () => {
     //TODO 上传图片
     { key: "cover", label: "封面", required: true },
     { key: "isbn", label: "ISBN", required: true, rules: ISBNRules },
+    { key: "storage", label: "库存量", required: true, rules: quantityRules },
   ];
   const { addFn, isSuccess, isError, responseData } = useAddSingleBook();
   useEffect(() => {

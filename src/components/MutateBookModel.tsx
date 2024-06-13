@@ -1,7 +1,7 @@
 import { Button, Form, Input, Modal, Row, message } from "antd";
 import { Book, useChangeBook } from "../hooks/useBook";
 import { useEffect, useState } from "react";
-import { ISBNRules } from "../utils/validateRules";
+import { ISBNRules, quantityRules } from "../utils/validateRules";
 interface FormItems {
   title: string;
   description: string;
@@ -23,6 +23,7 @@ const MutateBookButton = ({ book }: MutateBookModelProps) => {
     { key: "price", label: "标价(分)", required: true },
     //TODO 上传图片
     { key: "cover", label: "封面", required: true },
+    { key: "storage", label: "库存量", required: true, rules: quantityRules },
     { key: "isbn", label: "ISBN", required: true, rules: ISBNRules },
   ];
   const { changeFn, isError, responseData } = useChangeBook();
@@ -66,6 +67,7 @@ const MutateBookButton = ({ book }: MutateBookModelProps) => {
               author: book.author,
               price: book.price,
               cover: book.cover,
+              storage: book.storage,
               isbn: book?.isbn,
             }}
             onFinish={handleSubmit}

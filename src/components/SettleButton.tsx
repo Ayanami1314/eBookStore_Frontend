@@ -36,7 +36,10 @@ const SettleButton: React.FC = () => {
       if (responseData?.ok)
         messageApi.open({ type: "success", content: "下单成功!" });
       else {
-        messageApi.open({ type: "error", content: "下单失败!" });
+        messageApi.open({
+          type: "error",
+          content: `下单失败!${responseData?.message}`,
+        });
         setItems(backupItems);
       }
     }

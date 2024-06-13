@@ -1,10 +1,18 @@
 import { ProCard } from "@ant-design/pro-components";
-import { Button, Card, Divider, Flex, Typography, message } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Flex,
+  Row,
+  Typography,
+  message,
+} from "antd";
 import { Book, useDeleteSingleBook } from "../hooks/useBook";
 import useAuthStore from "../auth/useAuthStore";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 interface DetailProps {
   book: Book;
   addToCart: (id: number) => void;
@@ -27,7 +35,7 @@ const BookDetailCard = ({ book, addToCart }: DetailProps) => {
     if (isError || responseData?.ok === false) {
       messageApi.open({ type: "error", content: "删除失败!" });
     }
-  }, [isError, isSuccess, responseData, messageApi]);
+  }, [isError, isSuccess, responseData, messageApi, navigate]);
   return (
     <>
       {contextHolder}
@@ -44,11 +52,32 @@ const BookDetailCard = ({ book, addToCart }: DetailProps) => {
               <Typography.Title level={2}>{book.title}</Typography.Title>
             </Divider>
             <Divider orientation="left">
-              <Typography.Title level={3}>{"基本信息"}</Typography.Title>
+              {/* <Typography.Title level={3}>{"基本信息"}</Typography.Title> */}
+              <Typography.Title level={3} style={{ color: "red" }}>
+                {`售价：${book.price / 100}（元）`}
+              </Typography.Title>
             </Divider>
-            <Typography.Paragraph>{`作者：${book.author}    |    价格：${
-              book.price / 100
-            }    |    销量：${book.sales}`}</Typography.Paragraph>
+
+            <Typography.Paragraph>
+              <Row gutter={[16, 20]}>
+                <Col span={8}>
+                  <Typography.Title level={5}>
+                    {`作者：${book.author}`}
+                  </Typography.Title>
+                </Col>
+                <Col span={8}>
+                  <Typography.Title
+                    level={5}
+                  >{`累积销量：${book.sales}`}</Typography.Title>
+                </Col>
+                <Col span={8}>
+                  <Typography.Title level={5}>
+                    {`当前库存：${book.storage}` +
+                      (book.storage === 0 ? " (无库存)" : "")}
+                  </Typography.Title>
+                </Col>
+              </Row>
+            </Typography.Paragraph>
             {/* {book.ISBN && (
         <Typography.Paragraph>{"ISBN：" + book.ISBN}</Typography.Paragraph>
       )} */}

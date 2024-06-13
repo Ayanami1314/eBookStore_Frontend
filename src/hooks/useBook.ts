@@ -8,6 +8,7 @@ interface Book {
   price: number;
   cover: string; // 图像资源的url
   sales: number;
+  storage: number;
   isbn?: string;
 }
 interface searchBooksProp {
@@ -70,6 +71,7 @@ export type AddBookProps = {
   author: string;
   price: number;
   cover: string;
+  storage: number;
   isbn?: string;
 };
 const useAddSingleBook = () => {

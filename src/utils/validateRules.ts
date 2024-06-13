@@ -76,6 +76,21 @@ const URLRules = [
     message: "URL格式不正确",
   },
 ];
+const quantityRules = [
+  {
+    required: true,
+    message: "请输入有效的数字!",
+  },
+  {
+    pattern: /^[0-9]*$/,
+    message: "请输入有效的数字!",
+  },
+  {
+    // >= 0
+    min: 0,
+    message: "请输入有效的数字!",
+  },
+];
 export {
   emailRules,
   usernameRules,
@@ -83,4 +98,5 @@ export {
   phoneRules,
   ISBNRules,
   URLRules,
+  quantityRules,
 };

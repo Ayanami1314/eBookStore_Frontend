@@ -60,8 +60,13 @@ const AdminBookTable = ({ books }: BookTableProps) => {
     },
     {
       title: "销量",
-      dataIndex: "sale",
-      key: "sale",
+      dataIndex: "sales",
+      key: "sales",
+    },
+    {
+      title: "库存",
+      dataIndex: "storage",
+      key: "storage",
     },
     {
       title: "ISBN",
