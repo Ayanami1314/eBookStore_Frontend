@@ -32,7 +32,9 @@ const LoginForm = () => {
           type: "success",
           content: "登录成功！",
         });
-        navigate("/home");
+        setTimeout(() => {
+          navigate("/home");
+        }, 1000)
       } else
         messageApi.open({
           type: "error",

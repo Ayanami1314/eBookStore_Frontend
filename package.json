@@ -14,6 +14,7 @@
     "@ant-design/icons": "^5.3.7",
     "@ant-design/pro-components": "^2.6.49",
     "@ant-design/pro-provider": "^2.14.7",
+    "@stomp/stompjs": "^7.0.0",
     "@tanstack/react-query": "^5.22.2",
     "@tanstack/react-query-devtools": "^5.24.0",
     "antd": "^5.14.1",
@@ -26,7 +27,10 @@
     "react-highlight-words": "^0.20.0",
     "react-icons": "^5.0.1",
     "react-router-dom": "^6.22.1",
+    "react-use-websocket": "^4.9.0",
+    "sockjs-client": "^1.6.1",
     "ts-node": "^10.9.2",
+    "ws": "^8.18.0",
     "zustand": "^4.5.1"
   },
   "devDependencies": {
@@ -34,6 +38,7 @@
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "@types/react-highlight-words": "^0.16.7",
+    "@types/sockjs-client": "^1.5.4",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "@vitejs/plugin-react": "^4.2.1",

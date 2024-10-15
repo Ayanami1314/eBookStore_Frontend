@@ -34,7 +34,7 @@ const SettleButton: React.FC = () => {
   useEffect(() => {
     if (isSuccess) {
       if (responseData?.ok)
-        messageApi.open({ type: "success", content: "下单成功!" });
+        messageApi.open({ type: "success", content: responseData.message });
       else {
         messageApi.open({
           type: "error",

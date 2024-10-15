@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createHashRouter } from "react-router-dom";
 import Homepage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 import HomeLayout from "../pages/HomeLayout";
@@ -17,8 +17,9 @@ import AdminBookAnalysisPage from "../pages/Admin/AdminBookAnalysisPage";
 import AdminBookPage from "../pages/Admin/AdminBookPage";
 import AdminOrderPage from "../pages/Admin/AdminOrderPage";
 import CreateNewUserPage from "../pages/CreateNewUserPage";
+import WebSocketExample from "../components/TestWsConn";
 
-const Router = createBrowserRouter([
+const Router = createHashRouter([
   {
     path: "/",
     element: <UserPrivateRoute />,
@@ -34,6 +35,7 @@ const Router = createBrowserRouter([
           { path: "book/:id", element: <BookDetailPage /> },
           { path: "order", element: <OrderPage /> },
           { path: "analysis", element: <AnalysisPage /> },
+          { path: "ws-hello", element: <WebSocketExample />},
           {
             path: "admin",
             element: <AdminPrivateRoute />,

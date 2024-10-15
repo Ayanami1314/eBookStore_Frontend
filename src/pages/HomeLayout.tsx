@@ -5,6 +5,8 @@ import UserIcon from "../components/UserIcon";
 import useAuthStore from "../auth/useAuthStore";
 import { useMe } from "../hooks/useUsers";
 import { useEffect, useState } from "react";
+import GlobalNotification from "../components/GlobalNotification";
+import GlobalWebSocketReponseProvider from "../components/GlobalWebSocketReponseProvider";
 
 const { Header, Content, Footer } = Layout;
 interface NavItem {
@@ -93,6 +95,8 @@ const HomeLayout = () => {
   );
   return (
     <Layout>
+      <GlobalNotification />
+      <GlobalWebSocketReponseProvider />
       <Header
         style={{
           display: "flex",
