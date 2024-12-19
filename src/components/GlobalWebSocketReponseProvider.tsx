@@ -25,11 +25,13 @@ const GlobalWebSocketReponseProvider = () => {
   }, [me?.id]);
   const pushNotification = useNotificationStore((s) => s.pushNotification);
   useEffect(() => {
-    pushNotification({
-      content: `Connected to the server on user ${me?.id}`,
-      level: "info",
-    });
-  }, [me]);
+    if (me) {
+      pushNotification({
+        content: `Connected to the server on user ${me.id}`,
+        level: "info",
+      });
+    }
+  }, [me, pushNotification]);
 
   return <WebSocketAdapter {...props} />;
 };

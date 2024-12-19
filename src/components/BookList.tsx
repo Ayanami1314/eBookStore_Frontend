@@ -9,11 +9,12 @@ const BookList = () => {
   // span: n/24 * 父容器最大宽度，类似fr
   let books = fakeBooks;
   // TODO: 要做无限滚动吗？
-  const searchText = useBookQuery((s) => s.searchText);
+  const { searchText, queryType } = useBookQuery();
   const { data, isLoading, isError } = useBooks({
     keyword: searchText,
     pageIndex: 0,
     pageSize: 100,
+    queryType: queryType,
   });
   // 简单改变loading 属性就可以做出skeleton效果
   if (!isError && data) {

@@ -6,10 +6,12 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { LoginFormPage } from "@ant-design/pro-components";
 import login from "../services/login";
 import { passwordRules, usernameRules } from "../utils/validateRules";
+import { UserLoginResponse } from "../hooks/useUsers";
 interface FormItems {
   username: string;
   password: string;
 }
+
 const LoginForm = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const { authinfo, setAuth } = useAuthStore();
@@ -18,10 +20,14 @@ const LoginForm = () => {
 
   const handleSubmit = async (values: FormItems) => {
     login(values.username, values.password).then(({ ok, message, data }) => {
+      console.log("login response data: ", data);
       setAuth({
         ...authinfo,
         isUser: ok,
-        isAdmin: data?.role === "admin" ? ok : false,
+        isAdmin:
+          (data as UserLoginResponse | undefined)?.user.role === "admin"
+            ? ok
+            : false,
         password: values.password,
       });
       setMessage(message);
@@ -34,7 +40,7 @@ const LoginForm = () => {
         });
         setTimeout(() => {
           navigate("/home");
-        }, 1000)
+        }, 1000);
       } else
         messageApi.open({
           type: "error",

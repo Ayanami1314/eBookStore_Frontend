@@ -10,10 +10,12 @@ import { IconContext } from "react-icons";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import ResetPassword from "./ResetPasswordForm";
 import logout from "../services/logout";
+import useAuthStore from "../auth/useAuthStore";
 const UserIcon = () => {
   const { data, isError } = useMe();
   const { nickname, balance } = data || {};
   const navigate = useNavigate();
+  const clearAuth = useAuthStore((s) => s.clearAuth);
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -43,6 +45,7 @@ const UserIcon = () => {
         <p
           onClick={() => {
             logout().then(() => {
+              clearAuth();
               navigate("/login");
             });
           }}

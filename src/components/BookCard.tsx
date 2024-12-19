@@ -8,10 +8,10 @@ interface BookCardProps {
   isLoading: boolean;
   isError: boolean;
 }
-const limitLengthText = (description: string) => {
+const limitLengthText = (description: string | undefined) => {
   const limit = 50;
-  if (description.length > limit) {
-    return description.slice(0, limit) + "...";
+  if (description && description.length > limit) {
+    return description?.slice(0, limit) + "...";
   }
   return description;
 };

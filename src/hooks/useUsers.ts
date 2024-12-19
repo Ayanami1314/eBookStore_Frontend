@@ -6,6 +6,7 @@ import { CommonResponse } from "../services/type";
 interface User {
   id: number;
   nickname: string;
+  role: "admin" | "user";
   balance: number;
   status?: "normal" | "ban";
   headImg?: string;
@@ -16,6 +17,10 @@ interface User {
   firstName?: string;
   lastName?: string;
   notes?: string;
+}
+type UserLoginResponse = {
+  authorization: string;
+  user: User;
 }
 type UserToAdmin = User & { totalcost: number; ban?: boolean };
 // TODO: implement below two with admin api
@@ -102,4 +107,4 @@ export {
   registerNewUser,
   changeUserInfo,
 };
-export type { User, UserToAdmin };
+export type { User, UserToAdmin, UserLoginResponse };

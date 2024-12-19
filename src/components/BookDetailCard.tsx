@@ -6,6 +6,7 @@ import {
   Divider,
   Flex,
   Row,
+  Tag,
   Typography,
   message,
 } from "antd";
@@ -57,6 +58,12 @@ const BookDetailCard = ({ book, addToCart }: DetailProps) => {
                 {`售价：${book.price / 100}（元）`}
               </Typography.Title>
             </Divider>
+            {book.tags.length > 0 &&
+              book.tags.map((tag) => (
+                <Tag key={tag} color="red">
+                  {tag}
+                </Tag>
+              ))}
 
             <Typography.Paragraph>
               <Row gutter={[16, 20]}>

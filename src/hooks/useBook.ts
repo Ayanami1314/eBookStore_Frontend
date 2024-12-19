@@ -1,38 +1,78 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
+import { RequestProps } from "../services/type";
+import { gql, request } from "graphql-request";
+import { GraphQL_PREFIX } from "../common/common";
 interface Book {
   id: number;
   title: string;
-  description: string;
+  description?: string;
   author: string;
   price: number;
-  cover: string; // 图像资源的url
+  cover?: string; // 图像资源的url
   sales: number;
   storage: number;
   isbn?: string;
+  tags: string[];
 }
+type BookQueryType = "title" | "tag";
 interface searchBooksProp {
   keyword: string;
   pageIndex: number;
   pageSize: number;
+  queryType: BookQueryType;
 }
 interface BookResponse {
   total: number;
   books: Book[];
 }
+interface GraphQLBookResponse {
+  getBooks: BookResponse
+}
 const fetchBooks = async ({
   keyword,
   pageIndex,
   pageSize,
+  queryType,
 }: searchBooksProp) => {
-  const apiClientInstance = new apiClient<BookResponse>("/books");
-  return apiClientInstance
-    .get({
-      keyword: keyword,
-      pageIndex: pageIndex,
-      pageSize: pageSize,
-    })
-    .then((res) => res.books);
+  // const apiClientInstance = new apiClient<BookResponse>("/books");
+  // return apiClientInstance
+  //   .get({
+  //     keyword: keyword,
+  //     pageIndex: pageIndex,
+  //     pageSize: pageSize,
+  //     queryType: queryType,
+  //   })
+  //   .then((res) => res.books);
+  const booksQuery = gql`
+query getBooks($keyword: String,$pageIndex: Int,$pageSize: Int,$queryType: String) {
+  getBooks(keyword: $keyword,pageIndex: $pageIndex,pageSize: $pageSize,queryType: $queryType) {
+    total
+    books {
+      id
+      title
+      description
+      author
+      price
+      cover
+      sales
+      storage
+      isbn
+      tags
+    }
+  }
+}
+    `
+
+  return request(
+    `${GraphQL_PREFIX}`,
+    booksQuery,
+    { keyword: keyword, pageIndex: pageIndex, pageSize: pageSize, queryType: queryType }
+    )
+    .then(res => {
+      console.log(res)
+      return (res as GraphQLBookResponse).getBooks.books
+    });
 };
 const fetchSingleBook = (id: number) => {
   const apiClientInstance = new apiClient<Book>(`/book/${id}`);
@@ -42,14 +82,17 @@ const deleteSingleBook = (id: number) => {
   const apiClientInstance = new apiClient<Book>(`/admin/book/${id}`);
   return apiClientInstance.delete({ id: id });
 };
-const useBooks = ({ keyword, pageIndex, pageSize }: searchBooksProp) => {
+
+
+const useBooks = ({ keyword, pageIndex, pageSize, queryType}: searchBooksProp) => {
   const { data, isError, isLoading } = useQuery<Book[], Error>({
     queryKey: ["books", keyword],
     queryFn: () =>
       fetchBooks({
-        keyword: keyword,
-        pageIndex: pageIndex,
-        pageSize: pageSize,
+        keyword: keyword ?? "",
+        pageIndex: pageIndex ?? 0,
+        pageSize: pageSize ?? 20,
+        queryType: queryType ?? "TITLE",
       }),
   });
   return { data, isError, isLoading };
@@ -132,4 +175,4 @@ export {
   useAddSingleBook,
   useChangeBook,
 };
-export type { Book };
+export type { Book, BookQueryType };

@@ -1,7 +1,7 @@
 import { Button, Form, Input, Modal, Row, message } from "antd";
 import { Book, useChangeBook } from "../hooks/useBook";
 import { useEffect, useState } from "react";
-import { ISBNRules, quantityRules } from "../utils/validateRules";
+import { quantityRules } from "../utils/validateRules";
 interface FormItems {
   title: string;
   description: string;
@@ -24,7 +24,7 @@ const MutateBookButton = ({ book }: MutateBookModelProps) => {
     //TODO 上传图片
     { key: "cover", label: "封面", required: true },
     { key: "storage", label: "库存量", required: true, rules: quantityRules },
-    { key: "isbn", label: "ISBN", required: true, rules: ISBNRules },
+    { key: "isbn", label: "ISBN", required: true },
   ];
   const { changeFn, isError, responseData } = useChangeBook();
   const [isModalOpen, setIsModalOpen] = useState(false);
